@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BulletRush</string>
+    <string name="start_game">Start Game</string>
+    <string name="game_name">Bullet Rush</string>
 </resources>
