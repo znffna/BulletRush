@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import kr.ac.tukorea.ge.and.znffna.bulletrush.GameActivity;
+import kr.ac.tukorea.ge.and.znffna.bulletrush.BulletRushActivity;
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBtnStartGame(View view) {
-        Intent intent = new Intent(this, GameActivity.class);
+        Intent intent = new Intent(this, BulletRushActivity.class);
         startActivity(intent);
     }
 }

@@ -3,13 +3,11 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-public class GameActivity extends AppCompatActivity {
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.activity.GameActivity;
+
+public class BulletRushActivity extends GameActivity {
 
     private GameView gameView;
 
