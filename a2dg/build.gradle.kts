@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "kr.ac.tukorea.ge.and.znffna.bulletrush"
+    namespace = "kr.ac.tukorea.ge.and.znffna.bulletrush.a2dg"
     compileSdk = 35
 
     defaultConfig {
