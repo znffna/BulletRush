@@ -2,6 +2,7 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +17,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            startActivity(new Intent(this, BulletRushActivity.class));
+//        }
+//        return super.onTouchEvent(event);
+//    }
+
     public void onBtnStartGame(View view) {
-        Intent intent = new Intent(this, BulletRushActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, BulletRushActivity.class));
     }
 }

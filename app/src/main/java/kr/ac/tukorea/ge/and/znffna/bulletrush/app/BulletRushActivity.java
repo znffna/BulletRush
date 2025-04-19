@@ -8,7 +8,6 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.activity.GameActivity;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
 public class BulletRushActivity extends GameActivity {
-
     private GameView gameView;
 
     @Override
@@ -16,12 +15,5 @@ public class BulletRushActivity extends GameActivity {
         GameView.drawsDebugStuffs = BuildConfig.DEBUG;
         super.onCreate(savedInstanceState);
         new MainScene().push();
-    }
-
-    public void setFullScreen() {
-        int flags = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_FULLSCREEN |
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        gameView.setSystemUiVisibility(flags);
     }
 }
