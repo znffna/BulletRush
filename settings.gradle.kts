@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "BulletRush"
 include(":app")
+include("a2dg")

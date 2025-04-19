@@ -1,9 +1,9 @@
 plugins {
-    alias(libs.plugins.android.library)
+    id("com.android.library")
 }
 
 android {
-    namespace = "kr.ac.tukorea.ge.spgp2025.a2dg"
+    namespace = "kr.ac.tukorea.ge.and.znffna.bulletrush"
     compileSdk = 35
 
     defaultConfig {
