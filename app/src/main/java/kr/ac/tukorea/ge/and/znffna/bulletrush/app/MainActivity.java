@@ -6,7 +6,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import kr.ac.tukorea.ge.and.znffna.bulletrush.BulletRushActivity;
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 
 public class MainActivity extends AppCompatActivity {

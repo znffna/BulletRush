@@ -1,11 +1,10 @@
-package kr.ac.tukorea.ge.and.znffna.bulletrush;
+package kr.ac.tukorea.ge.and.znffna.bulletrush.app;
 
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.activity.GameActivity;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
 public class BulletRushActivity extends GameActivity {
 

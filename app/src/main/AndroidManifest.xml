@@ -13,7 +13,7 @@
         android:theme="@style/Theme.BulletRush"
         tools:targetApi="31">
         <activity
-            android:name=".BulletRushActivity"
+            android:name=".app.BulletRushActivity"
             android:exported="false" />
         <activity
             android:name=".app.MainActivity"
