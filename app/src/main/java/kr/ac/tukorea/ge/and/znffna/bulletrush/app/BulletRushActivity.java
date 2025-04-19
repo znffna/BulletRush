@@ -1,9 +1,9 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.app;
 
 import android.os.Bundle;
-import android.view.View;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.BuildConfig;
+import kr.ac.tukorea.ge.and.znffna.bulletrush.game.MainScene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.activity.GameActivity;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
