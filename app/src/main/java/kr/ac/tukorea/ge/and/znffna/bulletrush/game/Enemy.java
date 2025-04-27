@@ -1,16 +1,48 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
+import android.graphics.Canvas;
+
+import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 
-public class Enemy extends AnimSprite {
+public class Enemy extends Sprite {
 
-    public Enemy(int mipmapId, float fps) {
-        super(mipmapId, fps, 0);
+    private AnimSprite enemy_idle;
+    private AnimSprite enemy_move;
+    private float ENEMY_WIDTH = 200f;
+    private float ENEMY_HEIGHT = 200f;
+
+    public Enemy() {
+        this(0, 0);
+    }
+    public Enemy(int mipmapId) {
+        this(mipmapId, 0, 0);
     }
 
-    public Enemy(int mipmapId, float fps, int frameCount) {
-        super(mipmapId, fps, frameCount);
+    public Enemy(float x, float y) {
+        this(0, x, y);
     }
 
-    
+    public Enemy(int mipmapId, float x, float y) {
+        super(mipmapId);
+        this.x = x;
+        this.y = y;
+        enemy_idle = new AnimSprite(R.mipmap.enemy_idle, 5);
+        enemy_move = new AnimSprite(R.mipmap.enemy_move, 5);
+
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        // super.draw(canvas);
+        if (dx == 0 && dy == 0) {
+            enemy_idle.setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
+            enemy_idle.draw(canvas);
+        }
+        else {
+            enemy_move.setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
+            enemy_move.draw(canvas);
+        }
+    }
 }

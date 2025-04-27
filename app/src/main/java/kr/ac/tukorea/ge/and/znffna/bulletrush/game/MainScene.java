@@ -16,6 +16,8 @@ public class MainScene extends Scene {
         player = new Player(joyStick);
         add(player);
         add(joyStick);
+
+        add(new Enemy(0, 100, 100));
     }
 
     @Override
