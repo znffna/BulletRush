@@ -19,7 +19,7 @@ public class MainScene extends Scene {
         add(player);
         add(joyStick);
 
-        add(new Enemy(0, 100, 100));
+//        add(new Enemy(0, 100, 100));
     }
 
     @Override
