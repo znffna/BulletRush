@@ -56,6 +56,8 @@ public class JoyStick implements IGameObject {
                 pts = Metrics.fromScreen(event.getX(), event.getY());
                 startX = pts[0];
                 startY = pts[1];
+                x = startX; y = startY;
+                RectUtil.setRect(bgRect, x, y, bg_radius);
                 RectUtil.setRect(thumbRect, x, y, thumb_radius);
                 power = 0;
                 return true;
