@@ -38,8 +38,8 @@
     - SampleGame의 모듈을 사용 설정
 - 3주차
     - 플레이어, 적 오브젝트 작성  
-    - 총, 총알 오브젝트 작성
 - 4주차
+    - 총, 총알 오브젝트 작성
     - 적 오브젝트 및 EnemyGenerator 작성  
 - 5주차 
     - 이동에 따른 Background Layering 작성  
