@@ -14,6 +14,8 @@ public class MainScene extends Scene {
     public MainScene() {
         joyStick = new JoyStick(R.mipmap.joystick_bg, R.mipmap.joystick_thumb, 100, 1500, 100, 30, 80);
         player = new Player(joyStick);
+        Enemy.setTarget(player);
+
         add(player);
         add(joyStick);
 

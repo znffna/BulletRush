@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
 public class Enemy extends Sprite {
 
@@ -12,6 +13,9 @@ public class Enemy extends Sprite {
     private AnimSprite enemy_move;
     private float ENEMY_WIDTH = 200f;
     private float ENEMY_HEIGHT = 200f;
+    private float SPEED = 200f;
+
+    private static Player target;
 
     public Enemy() {
         this(0, 0);
@@ -30,7 +34,24 @@ public class Enemy extends Sprite {
         this.y = y;
         enemy_idle = new AnimSprite(R.mipmap.enemy_idle, 5);
         enemy_move = new AnimSprite(R.mipmap.enemy_move, 5);
+    }
 
+    public static void setTarget(Player target) {
+        Enemy.target = target;
+    }
+
+    public void update() {
+        float distance = SPEED * GameView.frameTime;
+        float deltaX = (float) (target.getX() - x);
+        float deltaY = (float) (target.getY() - y);
+        float length = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        dx = distance * deltaX / length;
+        dy = distance * deltaY / length;
+        x += dx;
+        y += dy;
+        setPosition(x, y);
+
+        super.update();
     }
 
     @Override

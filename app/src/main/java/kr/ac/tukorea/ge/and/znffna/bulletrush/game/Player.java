@@ -72,4 +72,12 @@ public class Player extends Sprite {
             player_move.draw(canvas);
         }
     }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
 }
