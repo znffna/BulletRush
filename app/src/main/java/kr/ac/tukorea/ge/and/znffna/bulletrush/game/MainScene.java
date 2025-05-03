@@ -34,6 +34,7 @@ public class MainScene extends Scene {
         add(Layer.player, player);
         add(Layer.ui, joyStick);
 
+        add(Layer.controller, new EnemyGenerator(this));
 //        add(Layer.enemy, new Enemy(0, 100, 100));
     }
 

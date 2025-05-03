@@ -9,7 +9,9 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends Sprite implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
@@ -19,7 +21,26 @@ public class Enemy extends Sprite implements IRecyclable, IBoxCollidable, ILayer
     private float ENEMY_HEIGHT = 200f;
     private float SPEED = 200f;
 
+    private static final int[] idle_resIds = {
+            R.mipmap.enemy_idle
+    };
+
+    private static final int[] move_resIds = {
+            R.mipmap.enemy_move
+    };
+
     private static Player target;
+
+    public static Enemy get(float x, float y, int resIndex) {
+        return Scene.top().getRecyclable(Enemy.class).init(x, y, resIndex);
+    }
+
+    private Enemy init(float x, float y, int resIndex) {
+        setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
+        enemy_idle = new AnimSprite(idle_resIds[resIndex], 5);
+        enemy_move = new AnimSprite(move_resIds[resIndex], 5);
+        return this;
+    }
 
     public Enemy() {
         this(0, 0);
@@ -34,10 +55,7 @@ public class Enemy extends Sprite implements IRecyclable, IBoxCollidable, ILayer
 
     public Enemy(int mipmapId, float x, float y) {
         super(mipmapId);
-        this.x = x;
-        this.y = y;
-        enemy_idle = new AnimSprite(R.mipmap.enemy_idle, 5);
-        enemy_move = new AnimSprite(R.mipmap.enemy_move, 5);
+
     }
 
     public float[] getPosition() {
