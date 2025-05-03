@@ -19,6 +19,7 @@ public class MainScene extends Scene {
         add(player);
         add(joyStick);
 
+        add(new Bullet(0));
 //        add(new Enemy(0, 100, 100));
     }
 
