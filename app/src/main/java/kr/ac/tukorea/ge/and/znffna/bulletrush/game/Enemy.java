@@ -49,7 +49,7 @@ public class Enemy extends Sprite {
         dy = distance * deltaY / length;
         x += dx;
         y += dy;
-        setPosition(x, y);
+        setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
 
         super.update();
     }

@@ -5,9 +5,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Bullet extends Sprite {
-
     private static final float SPEED = 50f;
-
     private static final float BULLET_WIDTH = 30f;
     private static final float BULLET_HEIGHT = BULLET_WIDTH;
 

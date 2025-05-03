@@ -47,8 +47,7 @@ public class Player extends Sprite {
         dy = (float) (distance * Math.sin(joyStick.angle_radian));
         x += dx;
         y += dy;
-        setPosition(x, y);
-
+        setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
         super.update();
     }
 
