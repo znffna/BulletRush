@@ -26,10 +26,14 @@ public class Sprite implements IGameObject {
         Log.v(TAG, "Created " + this.getClass().getSimpleName() + "@" + System.identityHashCode(this));
     }
 
+    public void setImageResourceId(int mipmapId) {
+        bitmap = BitmapPool.get(mipmapId);
+    }
     public void setPosition(float x, float y, float radius) {
         this.x = x;
         this.y = y;
         this.width = this.height = 2 * radius;
+        this.radius = radius;
         RectUtil.setRect(dstRect, x, y, radius);
 
     }
@@ -41,11 +45,6 @@ public class Sprite implements IGameObject {
         radius = Math.min(width, height) / 2;
         RectUtil.setRect(dstRect, x, y, width, height);
     }
-
-    public void setPosition(float x, float y){
-        setPosition(x, y, this.width, this.height);
-    }
-
     @Override
     public void update() {
         float timedDx = dx * GameView.frameTime;
