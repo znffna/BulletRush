@@ -28,8 +28,7 @@ public class MainScene extends Scene {
         add(Layer.player, player);
         add(Layer.ui, joyStick);
 
-        add(Layer.bullet, new Bullet(0));
-//        add(new Enemy(0, 100, 100));
+//        add(Layer.enemy, new Enemy(0, 100, 100));
     }
 
     @Override
