@@ -1,13 +1,17 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
+import android.graphics.RectF;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
-public class Enemy extends Sprite {
+public class Enemy extends Sprite implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
     private AnimSprite enemy_idle;
     private AnimSprite enemy_move;
@@ -34,6 +38,10 @@ public class Enemy extends Sprite {
         this.y = y;
         enemy_idle = new AnimSprite(R.mipmap.enemy_idle, 5);
         enemy_move = new AnimSprite(R.mipmap.enemy_move, 5);
+    }
+
+    public float[] getPosition() {
+        return new float[]{this.x, this.y};
     }
 
     public static void setTarget(Player target) {
@@ -65,5 +73,20 @@ public class Enemy extends Sprite {
             enemy_move.setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
             enemy_move.draw(canvas);
         }
+    }
+
+    @Override
+    public RectF getCollisionRect() {
+        return dstRect;
+    }
+
+    @Override
+    public MainScene.Layer getLayer() {
+        return MainScene.Layer.enemy;
+    }
+
+    @Override
+    public void onRecycle() {
+
     }
 }
