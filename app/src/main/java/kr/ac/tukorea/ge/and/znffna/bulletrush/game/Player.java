@@ -2,18 +2,23 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
     private static final float PLAYER_WIDTH = 200f;
     private static final float PLAYER_HEIGHT = PLAYER_WIDTH;
     private final AnimSprite player_idle;
@@ -25,6 +30,10 @@ public class Player extends Sprite {
 
     private float targetX;
     private float targetY;
+
+    private float FIRE_INTERVAL = 0.25f;
+    private float fireCoolTime = FIRE_INTERVAL;
+    private int power = 0;
 
     public Player(JoyStick joyStick) {
         super(0);
@@ -49,6 +58,23 @@ public class Player extends Sprite {
         y += dy;
         setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
         super.update();
+
+        fireCoolTime -= GameView.frameTime;
+        if (fireCoolTime <= 0) {
+            fireBullet();
+            fireCoolTime = FIRE_INTERVAL;
+        }
+    }
+
+    private void fireBullet() {
+        MainScene scene = (MainScene) Scene.top();
+        if (scene == null) return;
+
+//        int score = scene.getScore();
+//        int power = 10 + score / 1000;
+
+        Bullet bullet = Bullet.get(x, y, 0, power);
+        scene.add(bullet);
     }
 
     public void setTargetX(float targetX) {
@@ -78,5 +104,15 @@ public class Player extends Sprite {
 
     public float getY() {
         return y;
+    }
+
+    @Override
+    public RectF getCollisionRect() {
+        return dstRect;
+    }
+
+    @Override
+    public MainScene.Layer getLayer() {
+        return MainScene.Layer.player;
     }
 }
