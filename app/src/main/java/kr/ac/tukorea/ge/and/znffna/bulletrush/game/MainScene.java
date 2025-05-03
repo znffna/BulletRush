@@ -19,7 +19,7 @@ public class MainScene extends Scene {
     private Enemy target = null;
 
     public enum Layer {
-        bg, enemy, bullet, player, ui, controller;
+        bg, enemy, bullet, player, gun, ui, controller;
         public static final int COUNT = values().length;
     }
 

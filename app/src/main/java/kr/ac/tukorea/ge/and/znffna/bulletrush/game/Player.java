@@ -23,14 +23,15 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
     private final int state;
     private final JoyStick joyStick;
 
-    private float targetX;
-    private float targetY;
-
     private float FIRE_INTERVAL = 0.25f;
     private float fireCoolTime = FIRE_INTERVAL;
     private int power = 0;
+
+    private Gun gun;
+    private float GUN_OFFSET_X = 100f;
+    private float GUN_OFFSET_Y = 10f;
+
     private Enemy target;
-    private float SearchDistance;
 
     public Player(JoyStick joyStick) {
         super(0);
@@ -38,8 +39,10 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
         player_move = new AnimSprite(R.mipmap.player_move, 4);
         this.joyStick = joyStick;
         state = 0;
-
         setPosition(Metrics.width / 2, Metrics.height - 200, PLAYER_WIDTH, PLAYER_HEIGHT);
+
+        gun = new Gun();
+        gun.init(x + GUN_OFFSET_X,y + GUN_OFFSET_Y, 0);
     }
 
     public void update() {
@@ -62,6 +65,9 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
             fireBullet((float)Math.atan2(targetPosition[0] - this.x, targetPosition[1] - this.y));
             fireCoolTime = FIRE_INTERVAL;
         }
+
+        gun.setPosition(x + GUN_OFFSET_X, y + GUN_OFFSET_Y);
+        gun.update();
     }
 
     private void fireBullet(float angle) {
@@ -75,14 +81,6 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
         scene.add(bullet);
     }
 
-    public void setTargetX(float targetX) {
-        this.targetX = targetX;
-    }
-
-    public void setTargetY(float targetY) {
-        this.targetY = targetY;
-    }
-
     @Override
     public void draw(Canvas canvas) {
         // super.draw(canvas);
@@ -94,6 +92,8 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
             player_move.setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
             player_move.draw(canvas);
         }
+
+        gun.draw(canvas);
     }
 
     public float getX() {
