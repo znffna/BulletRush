@@ -1,16 +1,11 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
-import android.view.MotionEvent;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
@@ -34,6 +29,8 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
     private float FIRE_INTERVAL = 0.25f;
     private float fireCoolTime = FIRE_INTERVAL;
     private int power = 0;
+    private Enemy target;
+    private float SearchDistance;
 
     public Player(JoyStick joyStick) {
         super(0);
@@ -60,20 +57,21 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
         super.update();
 
         fireCoolTime -= GameView.frameTime;
-        if (fireCoolTime <= 0) {
-            fireBullet();
+        if (null != target && fireCoolTime <= 0) {
+            float[] targetPosition = target.getPosition();
+            fireBullet((float)Math.atan2(targetPosition[0] - this.x, targetPosition[1] - this.y));
             fireCoolTime = FIRE_INTERVAL;
         }
     }
 
-    private void fireBullet() {
+    private void fireBullet(float angle) {
         MainScene scene = (MainScene) Scene.top();
         if (scene == null) return;
 
 //        int score = scene.getScore();
 //        int power = 10 + score / 1000;
 
-        Bullet bullet = Bullet.get(x, y, 0, power);
+        Bullet bullet = Bullet.get(x, y, angle, power);
         scene.add(bullet);
     }
 
@@ -114,5 +112,9 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
     @Override
     public MainScene.Layer getLayer() {
         return MainScene.Layer.player;
+    }
+
+    public void setTarget(Enemy target) {
+        this.target = target;
     }
 }
