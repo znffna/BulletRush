@@ -160,6 +160,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     public void draw(Canvas canvas) {
         //super.draw(canvas);
         canvas.save();
+        canvas.translate(Metrics.width / 2 - Player.player.getX(), Metrics.height / 2 - Player.player.getY());
         canvas.rotate(angle, x, y);
         canvas.drawBitmap(bitmap, srcRect, dstRect, null);
         canvas.restore();

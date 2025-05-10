@@ -1,5 +1,6 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
+import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
@@ -8,6 +9,10 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class MainScene extends Scene {
+
+    public Player getPlayer() {
+        return player;
+    }
 
     private final Player player;
     private final JoyStick joyStick;
@@ -45,6 +50,11 @@ public class MainScene extends Scene {
     @Override
     public void update() {
         super.update();
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
     }
 
     @Override

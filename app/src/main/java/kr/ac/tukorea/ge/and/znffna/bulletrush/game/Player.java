@@ -35,6 +35,8 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
 
     private Enemy target;
 
+    public static Player player;
+
     float getX(){
         return this.x;
     }
@@ -45,11 +47,12 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
 
     public Player(JoyStick joyStick) {
         super(0);
+        player = this;
         player_idle = new AnimSprite(R.mipmap.player_idle, 4);
         player_move = new AnimSprite(R.mipmap.player_move, 4);
         this.joyStick = joyStick;
         state = 0;
-        setPosition(Metrics.width / 2, Metrics.height - 200, PLAYER_WIDTH, PLAYER_HEIGHT);
+        setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
 
     }
 
@@ -95,6 +98,9 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
     @Override
     public void draw(Canvas canvas) {
         // super.draw(canvas);
+        canvas.save();
+        canvas.translate(Metrics.width / 2 - x, Metrics.height / 2 - y);
+
         if (dx == 0 && dy == 0) {
             player_idle.setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
             player_idle.draw(canvas);
@@ -103,6 +109,8 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
             player_move.setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
             player_move.draw(canvas);
         }
+
+        canvas.restore();
     }
 
     @Override

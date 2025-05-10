@@ -1,5 +1,6 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
+import android.graphics.Canvas;
 import android.graphics.RectF;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
@@ -43,6 +44,15 @@ public class Bullet extends Sprite implements IRecyclable, IBoxCollidable, ILaye
 
     public Bullet() {
         super(R.mipmap.bullet);
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+//        super.draw(canvas);
+        canvas.save();
+        canvas.translate(Metrics.width / 2 - Player.player.getX(), Metrics.height / 2 - Player.player.getY());
+        canvas.drawBitmap(bitmap, srcRect, dstRect, null);
+        canvas.restore();
     }
 
     public float getPower() {

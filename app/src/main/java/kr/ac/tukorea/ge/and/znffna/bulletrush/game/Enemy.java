@@ -83,6 +83,10 @@ public class Enemy extends Sprite implements IRecyclable, IBoxCollidable, ILayer
     @Override
     public void draw(Canvas canvas) {
         // super.draw(canvas);
+
+        canvas.save();
+        canvas.translate(Metrics.width / 2 - Player.player.getX(), Metrics.height / 2 - Player.player.getY());
+
         if (dx == 0 && dy == 0) {
             enemy_idle.setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
             enemy_idle.draw(canvas);
@@ -91,6 +95,8 @@ public class Enemy extends Sprite implements IRecyclable, IBoxCollidable, ILayer
             enemy_move.setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
             enemy_move.draw(canvas);
         }
+
+        canvas.restore();
     }
 
     @Override
