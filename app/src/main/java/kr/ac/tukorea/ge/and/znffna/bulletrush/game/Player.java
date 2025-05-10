@@ -2,6 +2,7 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.util.Log;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
@@ -14,6 +15,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Player extends Sprite implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
+    private static final String TAG = Player.class.getSimpleName();
     private static final float PLAYER_WIDTH = 200f;
     private static final float PLAYER_HEIGHT = PLAYER_WIDTH;
     private final AnimSprite player_idle;
@@ -33,6 +35,14 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
 
     private Enemy target;
 
+    float getX(){
+        return this.x;
+    }
+
+    float getY(){
+        return this.y;
+    }
+
     public Player(JoyStick joyStick) {
         super(0);
         player_idle = new AnimSprite(R.mipmap.player_idle, 4);
@@ -49,20 +59,26 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
         if (joyStick.power <= 0) {
             dx = 0;
             dy = 0;
-            return;
         }
-        float distance = SPEED * joyStick.power * GameView.frameTime;
-        dx = (float) (distance * Math.cos(joyStick.angle_radian));
-        dy = (float) (distance * Math.sin(joyStick.angle_radian));
-        x += dx;
-        y += dy;
-        setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
-        super.update();
+        else {
+            float distance = SPEED * joyStick.power * GameView.frameTime;
+            dx = (float) (distance * Math.cos(joyStick.angle_radian));
+            dy = (float) (distance * Math.sin(joyStick.angle_radian));
+            x += dx;
+            y += dy;
+            setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+            super.update();
+        }
 
         fireCoolTime -= GameView.frameTime;
         if (null != target && fireCoolTime <= 0) {
+
             float[] targetPosition = target.getPosition();
-            fireBullet((float)Math.atan2(targetPosition[0] - this.x, targetPosition[1] - this.y));
+
+            Log.d(TAG, "target = " + target + "position = (" + targetPosition[0] + "," + targetPosition[1] + ")");
+            Log.d(TAG, "player_position = (" + x + "," + y + ")");
+
+            fireBullet((float)Math.atan2(targetPosition[1] - this.y, targetPosition[0] - this.x));
             fireCoolTime = FIRE_INTERVAL;
         }
 
@@ -94,14 +110,6 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
         }
 
         gun.draw(canvas);
-    }
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
     }
 
     @Override
