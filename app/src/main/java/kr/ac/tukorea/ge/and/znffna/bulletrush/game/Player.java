@@ -11,10 +11,11 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class Player extends Sprite implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
+public class Player extends WrapSprite implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
     private static final String TAG = Player.class.getSimpleName();
     private static final float PLAYER_WIDTH = 200f;
     private static final float PLAYER_HEIGHT = PLAYER_WIDTH;
@@ -70,18 +71,14 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
             setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
             super.update();
         }
+        Log.d(TAG, "player_position = (" + x + "," + y + ")");
 
-        fireCoolTime -= GameView.frameTime;
-        if (null != target && fireCoolTime <= 0) {
-
-            float[] targetPosition = target.getPosition();
-
-            Log.d(TAG, "target = " + target + "position = (" + targetPosition[0] + "," + targetPosition[1] + ")");
-            Log.d(TAG, "player_position = (" + x + "," + y + ")");
-
-            fireBullet((float)Math.atan2(targetPosition[1] - this.y, targetPosition[0] - this.x));
-            fireCoolTime = FIRE_INTERVAL;
-        }
+//        fireCoolTime -= GameView.frameTime;
+//        if (null != target && fireCoolTime <= 0) {
+//            float[] targetPosition = target.getPosition();
+//            fireBullet((float)Math.atan2(targetPosition[1] - this.y, targetPosition[0] - this.x));
+//            fireCoolTime = FIRE_INTERVAL;
+//        }
     }
 
     private void fireBullet(float angle) {
@@ -98,19 +95,16 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
     @Override
     public void draw(Canvas canvas) {
         // super.draw(canvas);
-        canvas.save();
-        canvas.translate(Metrics.width / 2 - x, Metrics.height / 2 - y);
+        RectUtil.setRect(dstRect, Metrics.width / 2, Metrics.height / 2, width, height);
 
         if (dx == 0 && dy == 0) {
-            player_idle.setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+            player_idle.setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
             player_idle.draw(canvas);
         }
         else {
-            player_move.setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
+            player_move.setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
             player_move.draw(canvas);
         }
-
-        canvas.restore();
     }
 
     @Override

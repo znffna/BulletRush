@@ -10,10 +10,11 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class Enemy extends Sprite implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
+public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
     private AnimSprite enemy_idle;
     private AnimSprite enemy_move;
@@ -84,19 +85,16 @@ public class Enemy extends Sprite implements IRecyclable, IBoxCollidable, ILayer
     public void draw(Canvas canvas) {
         // super.draw(canvas);
 
-        canvas.save();
-        canvas.translate(Metrics.width / 2 - Player.player.getX(), Metrics.height / 2 - Player.player.getY());
+        RectUtil.setRect(dstRect, x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), width, height);
 
         if (dx == 0 && dy == 0) {
-            enemy_idle.setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
+            enemy_idle.setPosition(x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), ENEMY_WIDTH, ENEMY_HEIGHT);
             enemy_idle.draw(canvas);
         }
         else {
-            enemy_move.setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
+            enemy_move.setPosition(x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), ENEMY_WIDTH, ENEMY_HEIGHT);
             enemy_move.draw(canvas);
         }
-
-        canvas.restore();
     }
 
     @Override
