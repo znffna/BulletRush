@@ -51,8 +51,6 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
         state = 0;
         setPosition(Metrics.width / 2, Metrics.height - 200, PLAYER_WIDTH, PLAYER_HEIGHT);
 
-        gun = new Gun();
-        gun.init(x + GUN_OFFSET_X,y + GUN_OFFSET_Y, 0);
     }
 
     public void update() {
@@ -81,9 +79,6 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
             fireBullet((float)Math.atan2(targetPosition[1] - this.y, targetPosition[0] - this.x));
             fireCoolTime = FIRE_INTERVAL;
         }
-
-        gun.setPosition(x + GUN_OFFSET_X, y + GUN_OFFSET_Y);
-        gun.update();
     }
 
     private void fireBullet(float angle) {
@@ -108,8 +103,6 @@ public class Player extends Sprite implements IBoxCollidable, ILayerProvider<Mai
             player_move.setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
             player_move.draw(canvas);
         }
-
-        gun.draw(canvas);
     }
 
     @Override
