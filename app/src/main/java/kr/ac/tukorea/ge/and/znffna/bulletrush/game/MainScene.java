@@ -2,10 +2,7 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.view.MotionEvent;
 
-import java.util.ArrayList;
-
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
@@ -36,6 +33,9 @@ public class MainScene extends Scene {
 
         add(Layer.player, player);
         add(Layer.ui, joyStick);
+
+        ScrollBackground bg = new ScrollBackground(R.mipmap.background, player);
+        add(Layer.bg, bg);
 
         add(Layer.controller, new EnemyGenerator(this));
 //        add(Layer.enemy, new Enemy(0, 100, 100));
