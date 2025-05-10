@@ -22,18 +22,15 @@ public class ScrollBackground extends Sprite {
     @Override
     public void update() {
         if(player == null) return;
-        this.y = player.getY();
-        this.x = player.getX();
-//        this.y += speed * GameView.frameTime; // y 값을 스크롤된 양으로 사용한다
     }
 
     @Override
     public void draw(Canvas canvas) {
         //super.draw(canvas);
-        curr_x = x % width;
+        curr_x = (x - player.getX() ) % width;
         if(curr_x > 0) curr_x -= width;
         while (curr_x < Metrics.width) {
-            curr_y = y % height;
+            curr_y = (y - player.getY()) % height;
             if (curr_y > 0) curr_y -= height;
             while (curr_y < Metrics.height) {
                 dstRect.set(curr_x, curr_y, curr_x + width, curr_y + height);
