@@ -13,8 +13,10 @@ public class ScrollBackground extends Sprite {
 
     public ScrollBackground(int bitmapResId, Player player) {
         super(bitmapResId);
-        this.width = bitmap.getWidth() * Metrics.height / bitmap.getHeight();
-        this.height = bitmap.getHeight() * Metrics.width / bitmap.getWidth();
+//        this.width = bitmap.getWidth() * Metrics.height / bitmap.getHeight();
+//        this.height = bitmap.getHeight() * Metrics.width / bitmap.getWidth();
+        this.width = Metrics.width;
+        this.height = Metrics.height;
         setPosition(Metrics.width / 2, Metrics.height / 2, width, height);
         this.player = player;
     }
