@@ -17,7 +17,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Player extends WrapSprite implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
     private static final String TAG = Player.class.getSimpleName();
-    private static final float PLAYER_WIDTH = 200f;
+    private static final float PLAYER_WIDTH = 100f;
     private static final float PLAYER_HEIGHT = PLAYER_WIDTH;
     private final AnimSprite player_idle;
     private final AnimSprite player_move;
@@ -37,14 +37,6 @@ public class Player extends WrapSprite implements IBoxCollidable, ILayerProvider
     private Enemy target;
 
     public static Player player;
-
-    float getX(){
-        return this.x;
-    }
-
-    float getY(){
-        return this.y;
-    }
 
     public Player(JoyStick joyStick) {
         super(0);

@@ -19,6 +19,15 @@ public class Sprite implements IGameObject {
     protected float x, y, dx, dy;
     protected float width, height, radius;
 
+
+    public float getX(){
+        return this.x;
+    }
+
+    public float getY(){
+        return this.y;
+    }
+
     public Sprite(int mipmapId) {
         if (mipmapId != 0) {
             bitmap = BitmapPool.get(mipmapId);

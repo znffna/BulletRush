@@ -152,7 +152,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         this.angle = (float) Math.toDegrees(angle);
         Log.d(TAG, "fireBullet | angle= " + this.angle);
 
-        Bullet bullet = Bullet.get(x, y, angle, power);
+        Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(angle), y + GUN_HEIGHT / 2 * (float)Math.sin(angle), angle, power);
         scene.add(bullet);
     }
 

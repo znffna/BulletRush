@@ -18,8 +18,8 @@ public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, IL
 
     private AnimSprite enemy_idle;
     private AnimSprite enemy_move;
-    private float ENEMY_WIDTH = 200f;
-    private float ENEMY_HEIGHT = 200f;
+    private float ENEMY_WIDTH = 100f;
+    private float ENEMY_HEIGHT = ENEMY_WIDTH;
     private float SPEED = 200f;
 
     private static final int[] idle_resIds = {
@@ -84,9 +84,7 @@ public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, IL
     @Override
     public void draw(Canvas canvas) {
         // super.draw(canvas);
-
-        RectUtil.setRect(dstRect, x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), width, height);
-
+        setDstRectPlayerSpace();
         if (dx == 0 && dy == 0) {
             enemy_idle.setPosition(x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), ENEMY_WIDTH, ENEMY_HEIGHT);
             enemy_idle.draw(canvas);

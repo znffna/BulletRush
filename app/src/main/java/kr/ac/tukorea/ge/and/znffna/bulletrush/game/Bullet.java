@@ -50,7 +50,7 @@ public class Bullet extends WrapSprite implements IRecyclable, IBoxCollidable, I
     @Override
     public void draw(Canvas canvas) {
 //        super.draw(canvas);
-        RectUtil.setRect(dstRect, x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), width, height);
+        setDstRectPlayerSpace();
         canvas.drawBitmap(bitmap, srcRect, dstRect, null);
     }
 
