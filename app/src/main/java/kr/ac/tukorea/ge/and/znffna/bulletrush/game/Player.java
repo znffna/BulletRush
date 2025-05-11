@@ -19,42 +19,43 @@ public class Player extends WrapSprite implements IBoxCollidable, ILayerProvider
     private static final String TAG = Player.class.getSimpleName();
     private static final float PLAYER_WIDTH = 100f;
     private static final float PLAYER_HEIGHT = PLAYER_WIDTH;
-    private final AnimSprite player_idle;
-    private final AnimSprite player_move;
 
-    private static final float SPEED = 300f;
-    private final int state;
+    public enum State {
+        idle, move
+    }
+    State state = State.idle;
+    private final AnimSprite[] playerAnimSprite;
+
+
+    private float SPEED;
     private final JoyStick joyStick;
 
     private float FIRE_INTERVAL = 0.25f;
-    private float fireCoolTime = FIRE_INTERVAL;
     private int power = 0;
-
-    private Gun gun;
-    private float GUN_OFFSET_X = 100f;
-    private float GUN_OFFSET_Y = 10f;
-
-    private Enemy target;
 
     public static Player player;
 
     public Player(JoyStick joyStick) {
         super(0);
         player = this;
-        player_idle = new AnimSprite(R.mipmap.player_idle, 4);
-        player_move = new AnimSprite(R.mipmap.player_move, 4);
+        SPEED = 300f;
+        AnimSprite player_idle = new AnimSprite(R.mipmap.player_idle, 4);
+        AnimSprite player_move = new AnimSprite(R.mipmap.player_move, 4);
+        playerAnimSprite = new AnimSprite[] {player_idle, player_move};
         this.joyStick = joyStick;
-        state = 0;
+        this.state = State.idle;
         setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
 
     }
 
     public void update() {
         if (joyStick.power <= 0) {
+            state = State.idle;
             dx = 0;
             dy = 0;
         }
         else {
+            state = State.move;
             float distance = SPEED * joyStick.power * GameView.frameTime;
             dx = (float) (distance * Math.cos(joyStick.angle_radian));
             dy = (float) (distance * Math.sin(joyStick.angle_radian));
@@ -63,40 +64,15 @@ public class Player extends WrapSprite implements IBoxCollidable, ILayerProvider
             setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
             super.update();
         }
-        Log.d(TAG, "player_position = (" + x + "," + y + ")");
-
-//        fireCoolTime -= GameView.frameTime;
-//        if (null != target && fireCoolTime <= 0) {
-//            float[] targetPosition = target.getPosition();
-//            fireBullet((float)Math.atan2(targetPosition[1] - this.y, targetPosition[0] - this.x));
-//            fireCoolTime = FIRE_INTERVAL;
-//        }
-    }
-
-    private void fireBullet(float angle) {
-        MainScene scene = (MainScene) Scene.top();
-        if (scene == null) return;
-
-//        int score = scene.getScore();
-//        int power = 10 + score / 1000;
-
-        Bullet bullet = Bullet.get(x, y, angle, power);
-        scene.add(bullet);
     }
 
     @Override
     public void draw(Canvas canvas) {
         // super.draw(canvas);
+        // 맵 중앙 고정 출력
         RectUtil.setRect(dstRect, Metrics.width / 2, Metrics.height / 2, width, height);
-
-        if (dx == 0 && dy == 0) {
-            player_idle.setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
-            player_idle.draw(canvas);
-        }
-        else {
-            player_move.setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
-            player_move.draw(canvas);
-        }
+        playerAnimSprite[state.ordinal()].setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
+        playerAnimSprite[state.ordinal()].draw(canvas);
     }
 
     @Override
@@ -109,7 +85,4 @@ public class Player extends WrapSprite implements IBoxCollidable, ILayerProvider
         return MainScene.Layer.player;
     }
 
-    public void setTarget(Enemy target) {
-        this.target = target;
-    }
 }
