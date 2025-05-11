@@ -18,15 +18,34 @@ public class WrapSprite extends Sprite implements IBoxCollidable {
         super.update();
         this.x = (x % Metrics.width + Metrics.width) % Metrics.width;
         this.y = (y % Metrics.height + Metrics.height) % Metrics.height;
+        setDstRectPlayerSpace();
     }
 
+    float px;
+    float py;
+
     void setDstRectPlayerSpace(){
-        RectUtil.setRect(dstRect, x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), width, height);
+        calcuateDrawPosition();
+        RectUtil.setRect(dstRect, px, py, width, height);
+//        RectUtil.setRect(dstRect, x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), width, height);
+    }
+
+    protected void calcuateDrawPosition() {
+        px = x - Player.player.getX();
+        py = y - Player.player.getY();
+
+        if (px >  Metrics.width  / 2) px -= Metrics.width;
+        if (px < -Metrics.width  / 2) px += Metrics.width;
+        if (py >  Metrics.height / 2) py -= Metrics.height;
+        if (py < -Metrics.height / 2) py += Metrics.height;
+
+        px = px + Metrics.width / 2;
+        py = py + Metrics.height / 2;
     }
 
     public RectF getCollisionRect() {
-
         return dstRect;
+
     }
 
     @Override

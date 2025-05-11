@@ -8,16 +8,17 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
-    private AnimSprite enemy_idle;
-    private AnimSprite enemy_move;
+    public enum State {
+        idle, move
+    }
+    State state = State.idle;
+    private AnimSprite[] enemyAnimSprite;
     private float ENEMY_WIDTH = 100f;
     private float ENEMY_HEIGHT = ENEMY_WIDTH;
     private float SPEED = 200f;
@@ -38,8 +39,10 @@ public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, IL
 
     private Enemy init(float x, float y, int resIndex) {
         setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
-        enemy_idle = new AnimSprite(idle_resIds[resIndex], 5);
-        enemy_move = new AnimSprite(move_resIds[resIndex], 5);
+        state = State.idle;
+        AnimSprite enemy_idle = new AnimSprite(idle_resIds[resIndex], 5);
+        AnimSprite enemy_move = new AnimSprite(move_resIds[resIndex], 5);
+        enemyAnimSprite = new AnimSprite[]{enemy_idle, enemy_move};
         return this;
     }
 
@@ -69,15 +72,30 @@ public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, IL
 
     public void update() {
         float distance = SPEED * GameView.frameTime;
-        float deltaX = (float) (target.getX() - x);
-        float deltaY = (float) (target.getY() - y);
+
+        calcuateDrawPosition();
+        float deltaX = (float) (target.getX() - this.x);
+        float deltaY = (float) (target.getY() - this.y);
+        if (deltaX >  Metrics.width  / 2) deltaX -= Metrics.width;
+        if (deltaX < -Metrics.width  / 2) deltaX += Metrics.width;
+        if (deltaY >  Metrics.height / 2) deltaY -= Metrics.height;
+        if (deltaY < -Metrics.height / 2) deltaY += Metrics.height;
+
         float length = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         dx = distance * deltaX / length;
         dy = distance * deltaY / length;
         x += dx;
         y += dy;
-        setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
 
+        if(dx == 0 && dy == 0){
+            state = State.idle;
+        }
+        else{
+            state = State.move;
+        }
+
+
+        setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
         super.update();
     }
 
@@ -85,14 +103,8 @@ public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, IL
     public void draw(Canvas canvas) {
         // super.draw(canvas);
         setDstRectPlayerSpace();
-        if (dx == 0 && dy == 0) {
-            enemy_idle.setPosition(x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), ENEMY_WIDTH, ENEMY_HEIGHT);
-            enemy_idle.draw(canvas);
-        }
-        else {
-            enemy_move.setPosition(x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), ENEMY_WIDTH, ENEMY_HEIGHT);
-            enemy_move.draw(canvas);
-        }
+        enemyAnimSprite[state.ordinal()].setPosition(px, py, ENEMY_WIDTH, ENEMY_HEIGHT);
+        enemyAnimSprite[state.ordinal()].draw(canvas);
     }
 
     @Override
