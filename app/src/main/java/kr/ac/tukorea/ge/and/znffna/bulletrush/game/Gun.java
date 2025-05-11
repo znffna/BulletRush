@@ -105,11 +105,12 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         // Player 기준 상대 위치로 이동
         setPosition(Follow.getX() + GUN_OFFSET_X, Follow.getY() + GUN_OFFSET_Y, GUN_WIDTH, GUN_HEIGHT);
 
+        if (findNearestTarget()) return;
         fireCoolTime -= GameView.frameTime;
         if (fireCoolTime <= 0) {
             // 자신과 가장 가까운 enemy 조준
-            if (findNearestTarget()) return;
             if (maxLength < MAX_RANGE) {
+                if (null == nearest) return;
                 float[] targetPosition = nearest.getPosition();
                 fireBullet((float) Math.atan2(targetPosition[1] - this.y, targetPosition[0] - this.x));
                 fireCoolTime = FIRE_INTERVAL;
