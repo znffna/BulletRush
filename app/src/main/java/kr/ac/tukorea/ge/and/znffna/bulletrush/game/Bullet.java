@@ -7,18 +7,15 @@ import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Bullet extends WrapSprite implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
     private static final float SPEED = 400f;
     private static final float BULLET_WIDTH = 30f;
     private static final float BULLET_HEIGHT = BULLET_WIDTH;
     private float power;
-    private float lifeTime = 3.0f;
+    private float maxRange = 3.0f;
 
     public static Bullet get(float x, float y, float angle, float power) {
         return Scene.top().getRecyclable(Bullet.class).init(x, y, angle, power);
@@ -29,7 +26,7 @@ public class Bullet extends WrapSprite implements IRecyclable, IBoxCollidable, I
         this.dx = (float) (SPEED * Math.cos(angle));
         this.dy = (float) (SPEED * Math.sin(angle));
         this.power = power;
-        this.lifeTime = 3.0f;
+        this.maxRange = 1000.0f;
         return this;
     }
 
@@ -37,8 +34,8 @@ public class Bullet extends WrapSprite implements IRecyclable, IBoxCollidable, I
     public void update() {
         super.update();
 
-        lifeTime -= GameView.frameTime;
-        if (lifeTime < 0.0f){
+        maxRange -= SPEED * GameView.frameTime;
+        if (maxRange < 0.0f){
             Scene.top().remove(this);
         }
     }
