@@ -12,7 +12,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
+public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
     public enum State {
         idle, move
@@ -93,8 +93,6 @@ public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, IL
         else{
             state = State.move;
         }
-
-
         setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
         super.update();
     }
@@ -102,7 +100,7 @@ public class Enemy extends WrapSprite implements IRecyclable, IBoxCollidable, IL
     @Override
     public void draw(Canvas canvas) {
         // super.draw(canvas);
-        setDstRectPlayerSpace();
+        setDstRectCameraSpace();
         enemyAnimSprite[state.ordinal()].setPosition(px, py, ENEMY_WIDTH, ENEMY_HEIGHT);
         enemyAnimSprite[state.ordinal()].draw(canvas);
     }

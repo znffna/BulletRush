@@ -1,6 +1,7 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -161,9 +162,10 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     public void draw(Canvas canvas) {
         //super.draw(canvas);
         canvas.save();
-        canvas.translate(Metrics.width / 2 - Player.player.getX(), Metrics.height / 2 - Player.player.getY());
+        canvas.translate(Metrics.width / 2 - MapObject.camera.x, Metrics.height / 2 - MapObject.camera.y);
         canvas.rotate(angle, x, y);
         canvas.drawBitmap(bitmap, srcRect, dstRect, null);
         canvas.restore();
     }
+
 }

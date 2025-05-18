@@ -2,20 +2,17 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.util.Log;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class Player extends WrapSprite implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
+public class Player extends MapObject implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
     private static final String TAG = Player.class.getSimpleName();
     private static final float PLAYER_WIDTH = 100f;
     private static final float PLAYER_HEIGHT = PLAYER_WIDTH;
@@ -33,11 +30,8 @@ public class Player extends WrapSprite implements IBoxCollidable, ILayerProvider
     private float FIRE_INTERVAL = 0.25f;
     private int power = 0;
 
-    public static Player player;
-
     public Player(JoyStick joyStick) {
         super(0);
-        player = this;
         SPEED = 300f;
         AnimSprite player_idle = new AnimSprite(R.mipmap.player_idle, 4);
         AnimSprite player_move = new AnimSprite(R.mipmap.player_move, 4);
@@ -62,8 +56,9 @@ public class Player extends WrapSprite implements IBoxCollidable, ILayerProvider
             x += dx;
             y += dy;
             setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
-            super.update();
         }
+        setCamera(x,y);
+        super.update();
     }
 
     @Override

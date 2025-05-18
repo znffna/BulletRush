@@ -10,7 +10,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
-public class Bullet extends WrapSprite implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
+public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
     private static final float SPEED = 400f;
     private static final float BULLET_WIDTH = 30f;
     private static final float BULLET_HEIGHT = BULLET_WIDTH;
@@ -44,12 +44,6 @@ public class Bullet extends WrapSprite implements IRecyclable, IBoxCollidable, I
         super(R.mipmap.bullet);
     }
 
-    @Override
-    public void draw(Canvas canvas) {
-//        super.draw(canvas);
-        setDstRectPlayerSpace();
-        canvas.drawBitmap(bitmap, srcRect, dstRect, null);
-    }
 
     public float getPower() {
         return power;
