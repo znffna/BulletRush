@@ -38,6 +38,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private Enemy nearest;
     private float maxLength;
     private final float MAX_RANGE = Math.min(Metrics.width, Metrics.height);
+    private MainScene.Layer targetLayer;
 
     public Gun(int mipmapId) {
         super(mipmapId);
@@ -154,7 +155,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         this.angle = (float) Math.toDegrees(angle);
         Log.d(TAG, "fireBullet | angle= " + this.angle);
 
-        Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(angle), y + GUN_HEIGHT / 2 * (float)Math.sin(angle), angle, power);
+        Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(angle), y + GUN_HEIGHT / 2 * (float)Math.sin(angle), angle, power, targetLayer);
         scene.add(bullet);
     }
 
