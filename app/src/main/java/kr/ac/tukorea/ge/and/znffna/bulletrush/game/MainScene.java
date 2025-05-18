@@ -42,6 +42,7 @@ public class MainScene extends Scene {
         ScrollBackground bg = new ScrollBackground(R.mipmap.background, player);
         add(Layer.bg, bg);
 
+        add(Layer.controller, new CollisionChecker(this));
         add(Layer.controller, new EnemyGenerator(this));
 //        add(Layer.enemy, new Enemy(0, 100, 100));
     }
