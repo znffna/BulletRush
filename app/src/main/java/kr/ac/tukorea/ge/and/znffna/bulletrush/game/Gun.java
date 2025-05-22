@@ -18,12 +18,12 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene.Layer> {
 
     private static final String TAG = Gun.class.getSimpleName();
-    private float GUN_WIDTH = 224f;
-    private float GUN_HEIGHT = 80f;
+    private float GUN_WIDTH = 112f;
+    private float GUN_HEIGHT = 40f;
 
 
     private int type;
-    private float power = 0f;
+    private int power = 5;
 
     private static final int[] resIds = {
         R.mipmap.assault_rifle, R.mipmap.assault_rifle_left
@@ -46,13 +46,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     public Gun(Player player, float offset_x, float offset_y, int type){
         super(R.mipmap.assault_rifle);
-
-        Follow = player;
-        GUN_OFFSET_X = offset_x;
-        GUN_OFFSET_Y = offset_y;
-        this.type = type;
-
-        setPosition(Follow.getX() + GUN_OFFSET_X, Follow.getY() + GUN_OFFSET_Y, GUN_WIDTH, GUN_HEIGHT);
+        init(player, offset_x, offset_y, type);
     }
 
     public static Gun get(Player gameobject, float x, float y) {
@@ -67,11 +61,17 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         setImageResourceId(resIds[type * 2]);
         GUN_OFFSET_X = x;
         GUN_OFFSET_Y = y;
-        Follow = object;
+        setFollow(object);
+        setType(type);
 
         setPosition(Follow.getX() + GUN_OFFSET_X, Follow.getY() + GUN_OFFSET_Y, GUN_WIDTH, GUN_HEIGHT);
         this.type = type;
         return this;
+    }
+
+    private void setFollow(Player object) {
+        Follow = object;
+        targetLayer = Follow.getLayer() == MainScene.Layer.enemy? MainScene.Layer.player : MainScene.Layer.enemy;
     }
 
     public Gun() {
@@ -95,9 +95,9 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     public void setType(int type) {
         this.type = type;
         if (type == 0) {
-            power = 5f;
+            power = 5;
         } else {
-            power = 5f;
+            power = 5;
         }
     }
 
@@ -107,7 +107,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         // Player 기준 상대 위치로 이동
         setPosition(Follow.getX() + GUN_OFFSET_X, Follow.getY() + GUN_OFFSET_Y, GUN_WIDTH, GUN_HEIGHT);
 
-        if (findNearestTarget()) return;
+        if (!findNearestTarget()) return;
         fireCoolTime -= GameView.frameTime;
         if (fireCoolTime <= 0) {
             // 자신과 가장 가까운 enemy 조준
@@ -122,7 +122,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     private boolean findNearestTarget() {
         Scene scene = Scene.top();
-        if(scene == null) return true;
+        if(scene == null) return false;
 
         maxLength = Float.MAX_VALUE;
         Enemy bfNear = nearest;
@@ -138,11 +138,11 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
                 }
             }
         }
-        if(nearest != bfNear) Log.d(TAG, "Nearest = " + nearest);
+//        if(nearest != bfNear) Log.d(TAG, "Nearest = " + nearest);
 //      if(nearest != null) Log.d(TAG, "Nearest = " + nearest);
 
         maxLength = (float) Math.sqrt(maxLength);
-        return false;
+        return true;
     }
 
     private void fireBullet(float angle) {

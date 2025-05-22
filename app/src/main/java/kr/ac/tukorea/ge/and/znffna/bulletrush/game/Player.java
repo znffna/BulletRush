@@ -55,6 +55,8 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
             dy = (float) (distance * Math.sin(joyStick.angle_radian));
             x += dx;
             y += dy;
+            dx = 0;
+            dy = 0;
             setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
         }
         setCamera(x,y);

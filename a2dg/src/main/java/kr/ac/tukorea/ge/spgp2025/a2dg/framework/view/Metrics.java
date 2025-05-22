@@ -9,6 +9,8 @@ public class Metrics {
     private static final String TAG = Metrics.class.getSimpleName();
     public static float width = 900f;
     public static float height = 1600f;
+    public static float worldWidth = 900f;
+    public static float worldHeight = 1600f;
     public static final float GRID_UNIT = 100f;
     public static final RectF borderRect = new RectF(0, 0, Metrics.width, Metrics.height);
     public static final RectF screenRect = new RectF();
@@ -20,9 +22,12 @@ public class Metrics {
     public static void setGameSize(float width, float height) {
         Metrics.width = width;
         Metrics.height = height;
+        Metrics.worldWidth = width * 4;
+        Metrics.worldHeight = height * 4;
         borderRect.right = width;
         borderRect.bottom = height;
     }
+
     public static void onSize(int w, int h) {
 
         float view_ratio = (float)w / (float)h;

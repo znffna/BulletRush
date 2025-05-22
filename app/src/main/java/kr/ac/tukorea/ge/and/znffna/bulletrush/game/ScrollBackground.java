@@ -1,8 +1,11 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class ScrollBackground extends Sprite {
@@ -10,6 +13,8 @@ public class ScrollBackground extends Sprite {
 
     private float curr_x;
     private float curr_y;
+
+    protected Paint borderPaint;
 
     public ScrollBackground(int bitmapResId, Player player) {
         super(bitmapResId);
@@ -19,6 +24,14 @@ public class ScrollBackground extends Sprite {
         this.height = Metrics.height;
         setPosition(Metrics.width / 2, Metrics.height / 2, width, height);
         this.player = player;
+
+        // for debug
+        if(GameView.drawsDebugStuffs) {
+            borderPaint = new Paint();
+            borderPaint.setColor(Color.BLUE);
+            borderPaint.setStrokeWidth(5);
+            borderPaint.setStyle(Paint.Style.STROKE);
+        }
     }
 
     @Override
@@ -37,6 +50,9 @@ public class ScrollBackground extends Sprite {
             while (curr_y < Metrics.height) {
                 dstRect.set(curr_x, curr_y, curr_x + width, curr_y + height);
                 canvas.drawBitmap(bitmap, null, dstRect, null);
+                if(GameView.drawsDebugStuffs){
+                    canvas.drawRect(dstRect, borderPaint);
+                }
                 curr_y += height;
             }
             curr_x += width;

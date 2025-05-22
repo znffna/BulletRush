@@ -7,6 +7,7 @@ import java.util.Random;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class EnemyGenerator implements IGameObject {
     private static final String TAG = EnemyGenerator.class.getSimpleName();
@@ -37,7 +38,7 @@ public class EnemyGenerator implements IGameObject {
         int level = 0;
         float x = random.nextFloat(), y = random.nextFloat();
         int resIndex = 0;
-        scene.add(Enemy.get(x, y, resIndex));
+        scene.add(Enemy.get(x % Metrics.worldWidth, y % Metrics.worldHeight, resIndex, level));
 
         enemies.append(level); // for debug
 

@@ -10,15 +10,9 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class MainScene extends Scene {
 
-    public Player getPlayer() {
-        return player;
-    }
 
     private final Player player;
     private final JoyStick joyStick;
-
-    private float minLength = Float.MAX_VALUE;
-    private Enemy target = null;
 
     public enum Layer {
         bg, enemy, bullet, player, gun, ui, controller;
@@ -33,7 +27,7 @@ public class MainScene extends Scene {
         player = new Player(joyStick);
         Enemy.setTarget(player);
 
-        Gun gun = new Gun(player, 100, 10, 0);
+        Gun gun = new Gun(player, 50, 5, 0);
         add(Layer.gun, gun);
 
         add(Layer.player, player);
