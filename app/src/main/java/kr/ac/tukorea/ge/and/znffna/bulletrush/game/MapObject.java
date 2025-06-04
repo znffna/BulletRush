@@ -27,7 +27,7 @@ public class MapObject extends Sprite implements IBoxCollidable {
         super.update();
         this.x = (x % Metrics.worldWidth + Metrics.worldWidth) % Metrics.worldWidth;
         this.y = (y % Metrics.worldHeight + Metrics.worldHeight) % Metrics.worldHeight;
-        RectUtil.setRect(dstRect, x, y);
+        dstRect.offsetTo(x - width / 2, y - height / 2);
 //        dstRect.offsetTo(x,y);
     }
 
@@ -36,7 +36,7 @@ public class MapObject extends Sprite implements IBoxCollidable {
 
     void setDstRectCameraSpace(){
         calcuateDrawPosition();
-        RectUtil.setRect(dstRect, px, py);
+        dstRect.offsetTo(px - width / 2, py - height / 2);
 //        dstRect.offsetTo(px,py);
 
 //        RectUtil.setRect(dstRect, px, py, width, height);

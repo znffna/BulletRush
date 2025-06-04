@@ -27,7 +27,7 @@ public class MainScene extends Scene {
 
         joyStick = new JoyStick(R.mipmap.joystick_bg, R.mipmap.joystick_thumb, 100, 1500, 100, 30, 80);
         player = new Player(joyStick);
-        Gauge gauge = new Gauge(10, Color.RED, Color.WHITE);
+//        Gauge gauge = new Gauge(10, Color.RED, Color.WHITE);
         Enemy.setTarget(player);
 
         Gun gun = new Gun(player, 50, 5, 0);

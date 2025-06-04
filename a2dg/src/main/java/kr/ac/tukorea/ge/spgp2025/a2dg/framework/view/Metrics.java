@@ -9,25 +9,24 @@ public class Metrics {
     private static final String TAG = Metrics.class.getSimpleName();
     public static float width = 900f;
     public static float height = 1600f;
-    public static float worldWidth = 900f;
-    public static float worldHeight = 1600f;
     public static final float GRID_UNIT = 100f;
     public static final RectF borderRect = new RectF(0, 0, Metrics.width, Metrics.height);
     public static final RectF screenRect = new RectF();
     private static final Matrix transformMatrix = new Matrix();
     private static final Matrix invertedMatrix = new Matrix();
     private static final float[] pointsBuffer = new float[2];
+    public static float worldWidth;
+    public static float worldHeight;
 
 
     public static void setGameSize(float width, float height) {
         Metrics.width = width;
         Metrics.height = height;
-        Metrics.worldWidth = width * 4;
-        Metrics.worldHeight = height * 4;
+        Metrics.worldWidth = width;
+        Metrics.worldHeight = height;
         borderRect.right = width;
         borderRect.bottom = height;
     }
-
     public static void onSize(int w, int h) {
 
         float view_ratio = (float)w / (float)h;

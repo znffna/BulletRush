@@ -19,10 +19,4 @@ public class RectUtil {
         float half_height = height / 2;
         rect.set(x - half_width, y - half_height, x + half_width, y + half_height);
     }
-
-    public static void setRect(RectF rect, float x, float y){
-        float width = rect.width();
-        float height = rect.height();
-        RectUtil.setRect(rect, x, y, width, height);
-    }
 }
