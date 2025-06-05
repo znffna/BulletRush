@@ -8,6 +8,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
@@ -16,6 +17,9 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private static final String TAG = Player.class.getSimpleName();
     private static final float PLAYER_WIDTH = 100f;
     private static final float PLAYER_HEIGHT = PLAYER_WIDTH;
+    private Gauge gauge;
+    private float life = 100;
+    private float maxLife = 100;
 
     public enum State {
         idle, move
@@ -70,6 +74,12 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         RectUtil.setRect(dstRect, Metrics.width / 2, Metrics.height / 2, width, height);
         playerAnimSprite[state.ordinal()].setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
         playerAnimSprite[state.ordinal()].draw(canvas);
+
+        float barSize = width * 2 / 3;
+        if (gauge == null){
+            gauge = new Gauge(0.2f, R.color.player_health_fg, R.color.player_health_bg);
+        }
+        gauge.draw(canvas, Metrics.width / 2 - barSize / 2, Metrics.height / 2 + barSize / 2 + 30, barSize, life / maxLife);
     }
 
     @Override
