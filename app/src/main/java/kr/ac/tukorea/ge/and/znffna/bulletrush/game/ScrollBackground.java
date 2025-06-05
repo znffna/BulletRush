@@ -50,9 +50,9 @@ public class ScrollBackground extends Sprite {
             while (curr_y < Metrics.height) {
                 dstRect.set(curr_x, curr_y, curr_x + width, curr_y + height);
                 canvas.drawBitmap(bitmap, null, dstRect, null);
-                if(GameView.drawsDebugStuffs){
-                    canvas.drawRect(dstRect, borderPaint);
-                }
+//                if(GameView.drawsDebugStuffs){
+//                    canvas.drawRect(dstRect, borderPaint);
+//                }
                 curr_y += height;
             }
             curr_x += width;

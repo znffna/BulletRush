@@ -4,13 +4,33 @@ import android.graphics.RectF;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class CollisionHelper {
     public static boolean collides(IBoxCollidable obj1, IBoxCollidable obj2) {
-        RectF r1 = obj1.getCollisionRect();
-        RectF r2 = obj2.getCollisionRect();
+        RectF r1 = new RectF(obj1.getCollisionRect());
+        RectF r2 = new RectF(obj2.getCollisionRect());
+
+        wrapRect(r1, r2);
         return collides(r1, r2);
     }
+
+    private static void wrapRect(RectF r1, RectF r2) {
+        float centerX1 = r1.centerX();
+        float centerY1 = r1.centerX();
+        float centerX2 = r2.centerX();
+        float centerY2 = r2.centerY();
+
+        if(Math.abs(centerX1 - centerX2) > Metrics.worldWidth / 2){
+            if(centerX1 < centerX2) r1.offset(Metrics.worldWidth, 0);
+            else r2.offset(Metrics.worldWidth, 0);
+        }
+        if(Math.abs(centerY1 - centerY2) > Metrics.worldHeight / 2){
+            if(centerY1 < centerY2) r1.offset(0, Metrics.worldHeight);
+            else r2.offset(0, Metrics.worldHeight);
+        }
+    }
+
     public static boolean collides(RectF r1, RectF r2) {
         if (r1.left > r2.right) return false;
         if (r1.top > r2.bottom) return false;
