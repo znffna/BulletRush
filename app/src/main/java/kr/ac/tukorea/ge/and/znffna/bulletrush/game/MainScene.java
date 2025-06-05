@@ -25,7 +25,7 @@ public class MainScene extends Scene {
         Metrics.setGameSize(900, 1500);
         initLayers(Layer.COUNT);
 
-        joyStick = new JoyStick(R.mipmap.joystick_bg, R.mipmap.joystick_thumb, 100, 1500, 100, 30, 80);
+        joyStick = new JoyStick(R.mipmap.joystick_bg, R.mipmap.joystick_thumb, Metrics.width - 200, Metrics.height - 200, 100, 30, 80);
         player = new Player(joyStick);
         Enemy.setTarget(player);
 
