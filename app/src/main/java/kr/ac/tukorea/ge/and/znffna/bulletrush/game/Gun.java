@@ -29,7 +29,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         R.mipmap.assault_rifle, R.mipmap.assault_rifle_left
     };
     private float angle;
-    private Player Follow;
+    private MapObject Follow;
     private float GUN_OFFSET_Y = 0f;
     private float GUN_OFFSET_X = 0f;
 
@@ -44,20 +44,20 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         super(mipmapId);
     }
 
-    public Gun(Player player, float offset_x, float offset_y, int type){
+    public Gun(MapObject player, float offset_x, float offset_y, int type){
         super(R.mipmap.assault_rifle);
         init(player, offset_x, offset_y, type);
     }
 
-    public static Gun get(Player gameobject, float x, float y) {
+    public static Gun get(MapObject gameobject, float x, float y) {
         return get(gameobject, x, y,0);
     }
 
-    public static Gun get(Player object, float x, float y, int type) {
+    public static Gun get(MapObject object, float x, float y, int type) {
         return Scene.top().getRecyclable(Gun.class).init(object, x, y, type);
     }
 
-    Gun init(Player object, float x, float y, int type) {
+    Gun init(MapObject object, float x, float y, int type) {
         setImageResourceId(resIds[type * 2]);
         GUN_OFFSET_X = x;
         GUN_OFFSET_Y = y;
@@ -69,7 +69,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         return this;
     }
 
-    private void setFollow(Player object) {
+    private void setFollow(MapObject object) {
         Follow = object;
         targetLayer = Follow.getLayer() == MainScene.Layer.enemy? MainScene.Layer.player : MainScene.Layer.enemy;
     }

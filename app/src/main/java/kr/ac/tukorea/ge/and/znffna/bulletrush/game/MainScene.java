@@ -17,7 +17,7 @@ public class MainScene extends Scene {
     private final JoyStick joyStick;
 
     public enum Layer {
-        bg, enemy, bullet, player, gun, ui, controller;
+        none, bg, enemy, bullet, player, gun, ui, controller;
         public static final int COUNT = values().length;
     }
 

@@ -5,11 +5,12 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class MapObject extends Sprite implements IBoxCollidable {
+public class MapObject extends Sprite implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
     public static void setCamera(float x, float y) {
         MapObject.camera.x = x;
@@ -28,7 +29,6 @@ public class MapObject extends Sprite implements IBoxCollidable {
         this.x = (x % Metrics.worldWidth + Metrics.worldWidth) % Metrics.worldWidth;
         this.y = (y % Metrics.worldHeight + Metrics.worldHeight) % Metrics.worldHeight;
         dstRect.offsetTo(x - width / 2, y - height / 2);
-//        dstRect.offsetTo(x,y);
     }
 
     float px;
@@ -37,10 +37,6 @@ public class MapObject extends Sprite implements IBoxCollidable {
     void setDstRectCameraSpace(){
         calcuateDrawPosition();
         dstRect.offsetTo(px - width / 2, py - height / 2);
-//        dstRect.offsetTo(px,py);
-
-//        RectUtil.setRect(dstRect, px, py, width, height);
-//        RectUtil.setRect(dstRect, x + Metrics.width / 2 - Player.player.getX(), y + Metrics.height / 2 - Player.player.getY(), width, height);
     }
 
     @Override
@@ -67,5 +63,9 @@ public class MapObject extends Sprite implements IBoxCollidable {
 
     public RectF getCollisionRect() {
         return dstRect;
+    }
+
+    public MainScene.Layer getLayer() {
+        return MainScene.Layer.none;
     }
 }
