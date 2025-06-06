@@ -125,7 +125,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         if (gauge == null){
             gauge = new Gauge(0.2f, R.color.player_health_fg, R.color.player_health_bg);
         }
-        gauge.draw(canvas, px - barSize / 2, py + barSize / 2 + 30, barSize, life / maxLife);
+        if(life < maxLife) gauge.draw(canvas, px - barSize / 2, py + barSize / 2 + 30, barSize, life / maxLife);
     }
 
     @Override
