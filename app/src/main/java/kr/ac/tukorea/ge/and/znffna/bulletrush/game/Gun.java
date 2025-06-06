@@ -35,7 +35,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     private float FIRE_INTERVAL = 0.25f;
     private float fireCoolTime = FIRE_INTERVAL;
-    private Enemy nearest;
+    private MapObject nearest;
     private float maxLength;
     private final float MAX_RANGE = Math.min(Metrics.width, Metrics.height);
     private MainScene.Layer targetLayer;
@@ -113,8 +113,9 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
             // 자신과 가장 가까운 enemy 조준
             if (maxLength < MAX_RANGE) {
                 if (null == nearest) return;
-                float[] targetPosition = nearest.getPosition();
-                fireBullet((float) Math.atan2(targetPosition[1] - this.y, targetPosition[0] - this.x));
+                float tx = nearest.getX();
+                float ty = nearest.getY();
+                fireBullet((float) Math.atan2(ty - this.y, tx - this.x));
                 fireCoolTime = FIRE_INTERVAL;
             }
         }
@@ -125,15 +126,16 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         if(scene == null) return false;
 
         maxLength = Float.MAX_VALUE;
-        Enemy bfNear = nearest;
+        MapObject bfNear = nearest;
         nearest = null;
-        ArrayList<IGameObject> enemys = Scene.top().objectsAt(MainScene.Layer.enemy);
-        for (IGameObject enemy : enemys) {
-            if (enemy instanceof Sprite) {
-                float[] position = ((Enemy) enemy).getPosition();
-                float length = (position[0] - x) * (position[0] - x) + (position[1] - y) * (position[1] - y);
+        ArrayList<IGameObject> targets = Scene.top().objectsAt(targetLayer);
+        for (IGameObject target : targets) {
+            if (target instanceof MapObject) {
+                float tx = ((Sprite) target).getX();
+                float ty = ((Sprite) target).getY();
+                float length = (tx - x) * (tx - x) + (ty - y) * (ty - y);
                 if (length < maxLength){
-                    nearest = (Enemy) enemy;
+                    nearest = ((MapObject)target);
                     maxLength = length;
                 }
             }
