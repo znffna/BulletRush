@@ -9,6 +9,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
@@ -17,6 +18,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private float ENEMY_WIDTH = 100f;
     private float ENEMY_HEIGHT = ENEMY_WIDTH;
     private float SPEED = 200f;
+    private Gauge gauge;
 
 
     public enum State {
@@ -49,7 +51,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         return this;
     }
 
-    private int life, maxLife;
+    private float life, maxLife;
     private int power;
 
     private void setLevel(int level) {
@@ -118,6 +120,12 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         setDstRectCameraSpace();
         enemyAnimSprite[state.ordinal()].setPosition(px, py, ENEMY_WIDTH, ENEMY_HEIGHT);
         enemyAnimSprite[state.ordinal()].draw(canvas);
+
+        float barSize = width * 2 / 3;
+        if (gauge == null){
+            gauge = new Gauge(0.2f, R.color.player_health_fg, R.color.player_health_bg);
+        }
+        gauge.draw(canvas, px - barSize / 2, py + barSize / 2 + 30, barSize, life / maxLife);
     }
 
     @Override
