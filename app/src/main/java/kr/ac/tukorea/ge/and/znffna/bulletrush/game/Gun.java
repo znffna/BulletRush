@@ -28,17 +28,18 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private static final int[] resIds = {
         R.mipmap.assault_rifle, R.mipmap.assault_rifle_left
     };
-    private float angle;
     private MapObject Follow;
     private float GUN_OFFSET_Y = 0f;
     private float GUN_OFFSET_X = 0f;
 
     private float FIRE_INTERVAL = 0.25f;
     private float fireCoolTime = FIRE_INTERVAL;
-    private MapObject nearest;
-    private float maxLength;
-    private final float MAX_RANGE = Math.min(Metrics.width, Metrics.height);
+
+
     private MainScene.Layer targetLayer;
+    private MapObject nearest;
+    private float angle;
+
 
     public Gun(int mipmapId) {
         super(mipmapId);
@@ -121,6 +122,8 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         }
     }
 
+    private float maxLength;
+    private final float MAX_RANGE = Math.min(Metrics.width, Metrics.height);
     private boolean findNearestTarget() {
         Scene scene = Scene.top();
         if(scene == null) return false;
