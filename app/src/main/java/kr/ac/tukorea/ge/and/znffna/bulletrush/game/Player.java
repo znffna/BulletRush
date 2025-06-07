@@ -87,7 +87,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         setCamera(x,y);
         super.update();
 
-        Log.d(TAG, "player_position = (" + x + ", " + y + ")");
+//        Log.d(TAG, "player_position = (" + x + ", " + y + ")");
     }
 
     @Override
