@@ -143,8 +143,6 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
                 }
             }
         }
-//        if(nearest != bfNear) Log.d(TAG, "Nearest = " + nearest);
-//      if(nearest != null) Log.d(TAG, "Nearest = " + nearest);
 
         maxLength = (float) Math.sqrt(maxLength);
         return true;
@@ -158,7 +156,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 //        int power = 10 + score / 1000;
 
         this.angle = (float) Math.toDegrees(angle);
-        Log.d(TAG, "fireBullet | angle= " + this.angle);
+//        Log.d(TAG, "fireBullet | angle= " + this.angle);
 
         Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(angle), y + GUN_HEIGHT / 2 * (float)Math.sin(angle), angle, power, targetLayer);
         scene.add(bullet);

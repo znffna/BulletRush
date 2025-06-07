@@ -16,6 +16,10 @@ public class MainScene extends Scene {
     private final Player player;
     private final JoyStick joyStick;
 
+    public void addExp(float exp) {
+        player.addExp(exp);
+    }
+
     public enum Layer {
         none, bg, enemy, bullet, player, gun, ui, controller;
         public static final int COUNT = values().length;

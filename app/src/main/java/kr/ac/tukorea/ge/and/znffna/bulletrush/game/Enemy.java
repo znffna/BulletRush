@@ -20,6 +20,10 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private float SPEED = 200f;
     private Gauge gauge;
 
+    public float getExp() {
+        return exp;
+    }
+
 
     public enum State {
         idle, move
@@ -53,10 +57,12 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     private float life, maxLife;
     private int power;
+    private float exp;
 
     private void setLevel(int level) {
         this.maxLife = this.life = 100 + level * 40;
         this.power = 10 + level * 20;
+        this.exp = (float)Math.pow(2.0f, level) * 100;
     }
 
     public boolean decreaseLife(int power) {

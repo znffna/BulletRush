@@ -29,6 +29,15 @@ public class Gauge {
         draw(canvas, value);
         canvas.restore();
     }
+
+    public void draw(Canvas canvas, float x, float y, float scale_x, float scale_y, float value) {
+        canvas.save();
+        canvas.translate(x, y);
+        canvas.scale(scale_x, scale_y);
+        draw(canvas, value);
+        canvas.restore();
+    }
+
     public void draw(Canvas canvas, float progress) {
         canvas.drawLine(0, 0, 1.0f, 0, bgPaint);
         if (progress > 0) {

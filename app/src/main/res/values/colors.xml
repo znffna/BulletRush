@@ -6,4 +6,6 @@
     <color name="player_health_bg">#B5FFD7D5</color>
     <color name="enemy_health_fg">#FF7F0000</color>
     <color name="enemy_health_bg">#B5FFD7D5</color>
+    <color name="player_exp_fg">#42B624</color>
+    <color name="player_exp_bg">#777777</color>
 </resources>
