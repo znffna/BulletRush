@@ -73,7 +73,7 @@ public class JoyStick implements IGameObject {
                 power = (float) (radius / move_radius);
                 float cx = x + dx, cy = y + dy;
                 //Log.d(TAG, "sx="+startX+" sy="+startY+" dx="+dx + " dy=" + dy + " x=" + x + " y=" + y + " cx=" + cx + " cy=" + cy);
-                Log.d(TAG, "angle=" + (int)Math.toDegrees(angle_radian) + "° power=" + String.format("%.2f", power));
+//                Log.d(TAG, "angle=" + (int)Math.toDegrees(angle_radian) + "° power=" + String.format("%.2f", power));
                 RectUtil.setRect(thumbRect, cx, cy, thumb_radius);
                 break;
 
