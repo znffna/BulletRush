@@ -17,7 +17,7 @@ public class CollisionHelper {
 
     private static void wrapRect(RectF r1, RectF r2) {
         float centerX1 = r1.centerX();
-        float centerY1 = r1.centerX();
+        float centerY1 = r1.centerY();
         float centerX2 = r2.centerX();
         float centerY2 = r2.centerY();
 
