@@ -2,6 +2,7 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.util.Log;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
@@ -17,9 +18,29 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private static final String TAG = Player.class.getSimpleName();
     private static final float PLAYER_WIDTH = 100f;
     private static final float PLAYER_HEIGHT = PLAYER_WIDTH;
-    private Gauge gauge;
+    private Gauge health_gauge;
     private float life = 100;
     private float maxLife = 100;
+
+    private int level = 1;
+    private Gauge exp_gauge;
+    private float exp = 0;
+    private float maxExp = 100;
+
+    public void addExp(float exp) {
+        this.exp += exp;
+        if(this.exp >= maxExp){
+            addLevel();
+        }
+    }
+
+    private void addLevel() {
+        this.level += 1;
+        this.exp -= this.maxExp;
+        if( this.exp < 0.0f) this.exp = 0f;
+        this.maxExp *= 2;
+    }
+
 
     public enum State {
         idle, move
@@ -65,6 +86,8 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         }
         setCamera(x,y);
         super.update();
+
+        Log.d(TAG, "player_position = (" + x + ", " + y + ")");
     }
 
     @Override
@@ -74,12 +97,19 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         RectUtil.setRect(dstRect, Metrics.width / 2, Metrics.height / 2, width, height);
         playerAnimSprite[state.ordinal()].setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
         playerAnimSprite[state.ordinal()].draw(canvas);
-
+        
+        // life 출력
         float barSize = width * 2 / 3;
-        if (gauge == null){
-            gauge = new Gauge(0.2f, R.color.player_health_fg, R.color.player_health_bg);
+        if (health_gauge == null){
+            health_gauge = new Gauge(0.2f, R.color.player_health_fg, R.color.player_health_bg);
         }
-        gauge.draw(canvas, Metrics.width / 2 - barSize / 2, Metrics.height / 2 + barSize / 2 + 30, barSize, life / maxLife);
+        health_gauge.draw(canvas, Metrics.width / 2 - barSize / 2, Metrics.height / 2 + barSize / 2 + 30, barSize, life / maxLife);
+
+        // exp 출력
+        if (exp_gauge == null){
+            exp_gauge = new Gauge(0.2f, R.color.player_exp_fg, R.color.player_exp_bg);
+        }
+        exp_gauge.draw(canvas, 0f, 0f, Metrics.width, Metrics.height * 1 / 5, exp / maxExp);
     }
 
     @Override
