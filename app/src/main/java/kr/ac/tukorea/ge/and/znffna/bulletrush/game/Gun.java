@@ -1,6 +1,8 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
@@ -11,7 +13,9 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
@@ -48,6 +52,9 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     public Gun(MapObject player, float offset_x, float offset_y, int type){
         super(R.mipmap.assault_rifle);
         init(player, offset_x, offset_y, type);
+
+        sparkBitmap = BitmapPool.get(R.mipmap.gun_spark);
+        sparkRect = new RectF();
     }
 
     public static Gun get(MapObject gameobject, float x, float y) {
@@ -148,6 +155,14 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         return true;
     }
 
+    private float SPARK_DURATION = 0.1f;
+    private float SPARK_OFFSET = 66f;
+    private float SPARK_WIDTH = GUN_WIDTH / 2;
+    private float SPARK_HEIGHT = SPARK_WIDTH * 3 / 5;
+
+    private RectF sparkRect;
+    private Bitmap sparkBitmap;
+
     private void fireBullet(float angle) {
         MainScene scene = (MainScene) Scene.top();
         if (scene == null) return;
@@ -169,7 +184,16 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         canvas.translate(Metrics.width / 2 - MapObject.camera.x, Metrics.height / 2 - MapObject.camera.y);
         canvas.rotate(angle, x, y);
         canvas.drawBitmap(bitmap, srcRect, dstRect, null);
+
+        if (FIRE_INTERVAL - fireCoolTime < SPARK_DURATION) {
+            canvas.rotate(90f, x, y);
+            RectUtil.setRect(sparkRect, x, y - SPARK_OFFSET , SPARK_WIDTH, SPARK_HEIGHT);
+            canvas.drawBitmap(sparkBitmap, null, sparkRect, null);
+        }
+
         canvas.restore();
+
+
     }
 
 }
