@@ -39,11 +39,11 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private AnimSprite[] enemyAnimSprite;
 
     private static final int[] idle_resIds = {
-            R.mipmap.enemy_idle0
+            R.mipmap.enemy_idle0,  R.mipmap.enemy_idle1,  R.mipmap.enemy_idle2
     };
 
     private static final int[] move_resIds = {
-            R.mipmap.enemy_move0
+            R.mipmap.enemy_move0, R.mipmap.enemy_move1, R.mipmap.enemy_move2
     };
 
     private static MapObject target;
