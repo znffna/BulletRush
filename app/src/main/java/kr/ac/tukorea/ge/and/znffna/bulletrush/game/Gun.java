@@ -2,9 +2,7 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -49,37 +47,31 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         super(mipmapId);
     }
 
-    public Gun(MapObject player, float offset_x, float offset_y, int type){
+    public Gun(MapObject object,MainScene.Layer targetLayer, float offset_x, float offset_y, int type){
         super(R.mipmap.assault_rifle);
-        init(player, offset_x, offset_y, type);
+        init(object, targetLayer, offset_x, offset_y, type);
 
         sparkBitmap = BitmapPool.get(R.mipmap.gun_spark);
         sparkRect = new RectF();
     }
 
-    public static Gun get(MapObject gameobject, float x, float y) {
-        return get(gameobject, x, y,0);
+    public static Gun get(MapObject object, MainScene.Layer targetLayer, float x, float y) {
+        return get(object, targetLayer, x, y,0);
     }
 
-    public static Gun get(MapObject object, float x, float y, int type) {
-        return Scene.top().getRecyclable(Gun.class).init(object, x, y, type);
+    public static Gun get(MapObject object, MainScene.Layer targetLayer, float x, float y, int type) {
+        return Scene.top().getRecyclable(Gun.class).init(object, targetLayer, x, y, type);
     }
 
-    Gun init(MapObject object, float x, float y, int type) {
+    Gun init(MapObject object, MainScene.Layer targetLayer, float x, float y, int type) {
         setImageResourceId(resIds[type * 2]);
-        GUN_OFFSET_X = x;
-        GUN_OFFSET_Y = y;
-        setFollow(object);
+        this.GUN_OFFSET_X = x;
+        this.GUN_OFFSET_Y = y;
+        this.Follow = object;
+        this.targetLayer = targetLayer;
         setType(type);
-
         setPosition(Follow.getX() + GUN_OFFSET_X, Follow.getY() + GUN_OFFSET_Y, GUN_WIDTH, GUN_HEIGHT);
-        this.type = type;
         return this;
-    }
-
-    private void setFollow(MapObject object) {
-        Follow = object;
-        targetLayer = Follow.getLayer() == MainScene.Layer.enemy? MainScene.Layer.player : MainScene.Layer.enemy;
     }
 
     public Gun() {

@@ -33,7 +33,7 @@ public class MainScene extends Scene {
         player = new Player(joyStick);
         Enemy.setTarget(player);
 
-        Gun gun = new Gun(player, 50, 5, 0);
+        Gun gun = new Gun(player, Layer.enemy,  50, 5, 0);
         add(Layer.gun, gun);
 
         add(Layer.player, player);
