@@ -71,11 +71,13 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             this.maxLife = this.life = 100 + level * 40;
             this.power = 10 + level * 20;
             this.exp = (float)Math.pow(1.5f, level) * 100;
+            this.range = ENEMY_WIDTH * 1.5f;
         }
         else if (type == EnemyType.Rush){
             this.maxLife = this.life = 100 + level * 40;
             this.power = 40 + level * 40;
             this.exp = (float)Math.pow(3.0f, level) * 100;
+            this.range = ENEMY_WIDTH * 6.0f;
         }
         else if (type == EnemyType.Gunner){
             this.maxLife = this.life = 100 + level * 40;
@@ -83,6 +85,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             this.exp = (float)Math.pow(2.0f, level) * 100;
             this.gun = Gun.get(this, MainScene.Layer.player, 50, 5, 0);
             Scene.top().add(this.gun);
+            this.range = ENEMY_WIDTH * 6.0f;
         }
     }
 
