@@ -36,11 +36,13 @@ public class EnemyGenerator implements IGameObject {
         StringBuilder enemies = new StringBuilder(); // for debug
 
         int level = 0;
-        float x = random.nextFloat(), y = random.nextFloat();
-        Enemy.EnemyType type = Enemy.EnemyType.Normal;
-        scene.add(Enemy.get(x % Metrics.worldWidth, y % Metrics.worldHeight, level, type));
+        for(int i = 0; i < wave / 5 + 1; ++i){
+            float x = random.nextFloat(), y = random.nextFloat();
+            Enemy.EnemyType type = Enemy.EnemyType.getType(random.nextInt(Enemy.EnemyType.COUNT));
+            scene.add(Enemy.get(x % Metrics.worldWidth, y % Metrics.worldHeight, level, type));
 
-        enemies.append(level); // for debug
+            enemies.append(level); // for debug
+        }
 
         Log.v(TAG, "Generating: wave " + wave + " : " + enemies.toString());
     }

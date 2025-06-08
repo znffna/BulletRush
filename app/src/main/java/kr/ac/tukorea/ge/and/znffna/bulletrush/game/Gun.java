@@ -51,8 +51,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         super(R.mipmap.assault_rifle);
         init(object, targetLayer, offset_x, offset_y, type);
 
-        sparkBitmap = BitmapPool.get(R.mipmap.gun_spark);
-        sparkRect = new RectF();
+
     }
 
     public static Gun get(MapObject object, MainScene.Layer targetLayer, float x, float y) {
@@ -65,6 +64,10 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     Gun init(MapObject object, MainScene.Layer targetLayer, float x, float y, int type) {
         setImageResourceId(resIds[type * 2]);
+
+        if(sparkBitmap == null) sparkBitmap = BitmapPool.get(R.mipmap.gun_spark);
+        if(sparkRect == null) sparkRect = new RectF();
+
         this.GUN_OFFSET_X = x;
         this.GUN_OFFSET_Y = y;
         this.Follow = object;

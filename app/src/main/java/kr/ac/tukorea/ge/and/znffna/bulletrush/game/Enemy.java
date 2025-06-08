@@ -20,7 +20,14 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private float range;
 
     public enum EnemyType {
-        Normal, Rush, Gunner
+        Normal, Rush, Gunner;
+
+        public static final int COUNT = values().length;
+
+        public static EnemyType getType(int index) {
+            return values()[index % COUNT];
+        }
+
     }
     private EnemyType type;
 
