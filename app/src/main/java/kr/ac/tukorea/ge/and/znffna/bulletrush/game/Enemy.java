@@ -10,6 +10,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
@@ -18,6 +19,11 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private int level;
     private Gun gun;
     private float range;
+
+    public void hasDied() {
+        GameView.view.getTopScene().remove(MainScene.Layer.enemy, this);
+        if(this.gun != null) GameView.view.getTopScene().remove(MainScene.Layer.gun, this.gun);
+    }
 
     public enum EnemyType {
         Normal, Rush, Gunner;
@@ -91,6 +97,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             this.power = 10 + level * 20;
             this.exp = (float)Math.pow(2.0f, level) * 100;
             this.gun = Gun.get(this, MainScene.Layer.player, 50, 5, 0);
+            this.gun.setFIRE_INTERVAL(2.0f);
             Scene.top().add(this.gun);
             this.range = ENEMY_WIDTH * 6.0f;
         }

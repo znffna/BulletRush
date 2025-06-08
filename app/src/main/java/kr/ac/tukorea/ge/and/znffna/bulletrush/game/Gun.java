@@ -34,6 +34,10 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private float GUN_OFFSET_Y = 0f;
     private float GUN_OFFSET_X = 0f;
 
+    public void setFIRE_INTERVAL(float FIRE_INTERVAL) {
+        this.FIRE_INTERVAL = FIRE_INTERVAL;
+    }
+
     private float FIRE_INTERVAL = 0.25f;
     private float fireCoolTime = FIRE_INTERVAL;
 
