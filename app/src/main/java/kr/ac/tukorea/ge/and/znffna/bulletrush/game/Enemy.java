@@ -17,6 +17,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     private int level;
     private Gun gun;
+    private float range;
 
     public enum EnemyType {
         Normal, Rush, Gunner
@@ -124,7 +125,6 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     @Override
     public void update() {
-//        calcuateDrawPosition();
         float deltaX = (float) (target.getX() - this.x);
         float deltaY = (float) (target.getY() - this.y);
         if (deltaX >  Metrics.worldWidth / 2) deltaX -= Metrics.worldWidth;
@@ -133,19 +133,34 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         if (deltaY < -Metrics.worldHeight / 2) deltaY += Metrics.worldHeight;
 
         float length = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        dx = SPEED * deltaX / length;
-        dy = SPEED * deltaY / length;
-//        x += dx;
-//        y += dy;
-
-        if(dx == 0 && dy == 0){
-            state = State.idle;
+        // length를 통해 공격 or 이동 선택
+        if(length < range){
+            Attack();
         }
         else{
-            state = State.move;
+            dx = SPEED * deltaX / length;
+            dy = SPEED * deltaY / length;
+
+            if(dx == 0 && dy == 0){
+                state = State.idle;
+            }
+            else{
+                state = State.move;
+            }
         }
-//        setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
         super.update();
+    }
+
+    private void Attack() {
+        if (type == EnemyType.Normal){
+
+        }
+        else if (type == EnemyType.Rush){
+
+        }
+        else if (type == EnemyType.Gunner){
+
+        }
     }
 
     @Override
