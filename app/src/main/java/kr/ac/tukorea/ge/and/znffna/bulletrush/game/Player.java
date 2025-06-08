@@ -107,10 +107,12 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         health_gauge.draw(canvas, Metrics.width / 2 - barSize / 2, Metrics.height / 2 + barSize / 2 + 30, barSize, life / maxLife);
 
         // exp 출력
+        float exp_aspect = 0.2f;
+        float expSize = Metrics.width * 1 / 4;
         if (exp_gauge == null){
-            exp_gauge = new Gauge(0.2f, R.color.player_exp_fg, R.color.player_exp_bg, Paint.Cap.SQUARE);
+            exp_gauge = new Gauge(exp_aspect, R.color.player_exp_fg, R.color.player_exp_bg, Paint.Cap.SQUARE);
         }
-        exp_gauge.draw(canvas, 0f, Metrics.width * 1 / 4 * 0.1f, Metrics.width * 1 / 4, exp / maxExp);
+        exp_gauge.draw(canvas, 0f, expSize * exp_aspect / 2, expSize, exp / maxExp);
     }
 
     @Override
