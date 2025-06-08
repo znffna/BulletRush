@@ -12,28 +12,25 @@ public class Gauge {
     private final Paint fgPaint = new Paint();
     private final Paint bgPaint = new Paint();
     public Gauge(float width, int fgColorResId, int bgColorResId) {
+        this(width, fgColorResId, bgColorResId, Paint.Cap.ROUND);
+    }
+
+    public Gauge(float width, int fgColorResId, int bgColorResId, Paint.Cap style){
         Resources res = GameView.view.getResources();
         bgPaint.setStyle(Paint.Style.STROKE);
         bgPaint.setStrokeWidth(width);
         bgPaint.setColor(ResourcesCompat.getColor(res, bgColorResId, null));
-        bgPaint.setStrokeCap(Paint.Cap.ROUND);
+        bgPaint.setStrokeCap(style);
         fgPaint.setStyle(Paint.Style.STROKE);
         fgPaint.setStrokeWidth(width / 2);
         fgPaint.setColor(ResourcesCompat.getColor(res, fgColorResId, null));
-        fgPaint.setStrokeCap(Paint.Cap.ROUND);
+        fgPaint.setStrokeCap(style);
     }
+
     public void draw(Canvas canvas, float x, float y, float scale, float value) {
         canvas.save();
         canvas.translate(x, y);
         canvas.scale(scale, scale);
-        draw(canvas, value);
-        canvas.restore();
-    }
-
-    public void draw(Canvas canvas, float x, float y, float scale_x, float scale_y, float value) {
-        canvas.save();
-        canvas.translate(x, y);
-        canvas.scale(scale_x, scale_y);
         draw(canvas, value);
         canvas.restore();
     }

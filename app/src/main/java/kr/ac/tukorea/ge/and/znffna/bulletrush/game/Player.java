@@ -1,6 +1,7 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.Log;
 
@@ -107,9 +108,9 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
 
         // exp 출력
         if (exp_gauge == null){
-            exp_gauge = new Gauge(0.2f, R.color.player_exp_fg, R.color.player_exp_bg);
+            exp_gauge = new Gauge(0.2f, R.color.player_exp_fg, R.color.player_exp_bg, Paint.Cap.SQUARE);
         }
-        exp_gauge.draw(canvas, 0f, 0f, Metrics.width, Metrics.height * 1 / 5, exp / maxExp);
+        exp_gauge.draw(canvas, 0f, Metrics.width * 1 / 4 * 0.1f, Metrics.width * 1 / 4, exp / maxExp);
     }
 
     @Override
