@@ -15,6 +15,14 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
 
+    private int level;
+    private Gun gun;
+
+    public enum EnemyType {
+        Normal, Rush, Gunner
+    }
+    private EnemyType type;
+
     private float ENEMY_WIDTH = 100f;
     private float ENEMY_HEIGHT = ENEMY_WIDTH;
     private float SPEED = 200f;
@@ -23,7 +31,6 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     public float getExp() {
         return exp;
     }
-
 
     public enum State {
         idle, move
@@ -41,29 +48,51 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     private static MapObject target;
 
-    public static Enemy get(float x, float y, int resIndex, int level) {
-        return Scene.top().getRecyclable(Enemy.class).init(x, y, resIndex, level);
+    public static Enemy get(float x, float y, int level, EnemyType type) {
+        return Scene.top().getRecyclable(Enemy.class).init(x, y, level, type);
     }
 
-    private Enemy init(float x, float y, int resIndex, int level) {
+    private Enemy init(float x, float y, int level, EnemyType type) {
         setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
         state = State.idle;
-        AnimSprite enemy_idle = new AnimSprite(idle_resIds[resIndex], 5);
-        AnimSprite enemy_move = new AnimSprite(move_resIds[resIndex], 5);
-        enemyAnimSprite = new AnimSprite[]{enemy_idle, enemy_move};
-        setLevel(level);
+        this.level = level;
+        setType(type);
         return this;
     }
 
-    private float life, maxLife;
-    private int power;
-    private float exp;
+    private void setType(EnemyType type) {
+        this.type = type;
+        AnimSprite enemy_idle = new AnimSprite(idle_resIds[type.ordinal()], 5);
+        AnimSprite enemy_move = new AnimSprite(move_resIds[type.ordinal()], 5);
+        enemyAnimSprite = new AnimSprite[]{enemy_idle, enemy_move};
 
-    private void setLevel(int level) {
-        this.maxLife = this.life = 100 + level * 40;
-        this.power = 10 + level * 20;
-        this.exp = (float)Math.pow(2.0f, level) * 100;
+        if (type == EnemyType.Normal){
+            this.maxLife = this.life = 100 + level * 40;
+            this.power = 10 + level * 20;
+            this.exp = (float)Math.pow(1.5f, level) * 100;
+        }
+        else if (type == EnemyType.Rush){
+            this.maxLife = this.life = 100 + level * 40;
+            this.power = 40 + level * 40;
+            this.exp = (float)Math.pow(3.0f, level) * 100;
+        }
+        else if (type == EnemyType.Gunner){
+            this.maxLife = this.life = 100 + level * 40;
+            this.power = 10 + level * 20;
+            this.exp = (float)Math.pow(2.0f, level) * 100;
+            this.gun = Gun.get(this, MainScene.Layer.player, 50, 5, 0);
+            Scene.top().add(this.gun);
+        }
     }
+
+    private float life, maxLife;
+
+    public float getPower() {
+        return power;
+    }
+
+    private float power;
+    private float exp;
 
     public boolean decreaseLife(int power) {
         life -= power;
@@ -83,7 +112,6 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     public Enemy(int mipmapId, float x, float y) {
         super(mipmapId);
-
     }
 
     public float[] getPosition() {
