@@ -2,6 +2,8 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.RectF;
 
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private int level;
     private Gun gun;
     private float range;
+    private Paint paint;
+    private final int[] rangeColor = {Color.CYAN, Color.YELLOW, Color.RED};
 
     public void hasDied() {
         GameView.view.getTopScene().remove(MainScene.Layer.enemy, this);
@@ -56,7 +60,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         public static final int COUNT = values().length;
     }
     State state = State.idle;
-    private static ArrayList<ArrayList<Bitmap>> enemyBitmap = new ArrayList<>();; // [Type][State]
+    private static ArrayList<ArrayList<Bitmap>> enemyBitmap = new ArrayList<>();; // [State][Type]
 
     private static final int[] resource_resIds = {
             R.mipmap.enemy_idle0, R.mipmap.enemy_idle1, R.mipmap.enemy_idle2,
@@ -74,6 +78,15 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         state = State.idle;
         this.level = level;
         setType(type);
+
+        if(paint == null){
+            paint = new Paint();
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(1.5f);
+        }
+
+        paint.setColor(rangeColor[type.ordinal()]);
+
         return this;
     }
 
@@ -130,10 +143,10 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     public Enemy(int mipmapId, float x, float y) {
         super(mipmapId);
         if(enemyBitmap.isEmpty()){
-            for(int i = 0; i < EnemyType.COUNT; ++i){
+            for(int i = 0; i < State.COUNT; ++i){
                 enemyBitmap.add(new ArrayList<>());
-                for(int j = 0; j < State.COUNT; ++j){
-                    enemyBitmap.get(i).add(BitmapPool.get(resource_resIds[i * State.COUNT + j]));
+                for(int j = 0; j < EnemyType.COUNT; ++j){
+                    enemyBitmap.get(i).add(BitmapPool.get(resource_resIds[i * EnemyType.COUNT + j]));
                 }
             }
         }
@@ -191,9 +204,12 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     public void draw(Canvas canvas) {
         // super.draw(canvas);
         setDstRectCameraSpace();
-        bitmap = enemyBitmap.get(type.ordinal()).get(state.ordinal());
+        bitmap = enemyBitmap.get(state.ordinal()).get(type.ordinal());
         super.draw(canvas);
 
+        canvas.drawCircle(px, py, range, paint);
+
+        // life 출력
         float barSize = width * 2 / 3;
         if (gauge == null){
             gauge = new Gauge(0.2f, R.color.enemy_health_fg, R.color.enemy_health_bg);
