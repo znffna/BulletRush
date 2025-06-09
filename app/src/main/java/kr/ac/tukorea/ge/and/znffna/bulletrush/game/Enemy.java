@@ -59,8 +59,12 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
         public static final int COUNT = values().length;
     }
+
     State state = State.idle;
-    private static ArrayList<ArrayList<Bitmap>> enemyBitmap = new ArrayList<>();; // [State][Type]
+    public void setState(State state) {
+        this.state = state;
+    }
+
 
     private static final int[] resource_resIds = {
             R.mipmap.enemy_idle0, R.mipmap.enemy_idle1, R.mipmap.enemy_idle2,
@@ -142,14 +146,6 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     public Enemy(int mipmapId, float x, float y) {
         super(mipmapId);
-        if(enemyBitmap.isEmpty()){
-            for(int i = 0; i < State.COUNT; ++i){
-                enemyBitmap.add(new ArrayList<>());
-                for(int j = 0; j < EnemyType.COUNT; ++j){
-                    enemyBitmap.get(i).add(BitmapPool.get(resource_resIds[i * EnemyType.COUNT + j]));
-                }
-            }
-        }
     }
 
     public float[] getPosition() {
@@ -210,7 +206,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     public void draw(Canvas canvas) {
         // super.draw(canvas);
         setDstRectCameraSpace();
-        bitmap = enemyBitmap.get(state.ordinal()).get(type.ordinal());
+        setImageResourceId(resource_resIds[state.ordinal() * EnemyType.COUNT + type.ordinal()], 4);
         super.draw(canvas);
 
         canvas.drawCircle(px, py, range, paint);
