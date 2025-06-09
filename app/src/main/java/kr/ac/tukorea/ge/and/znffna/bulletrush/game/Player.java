@@ -3,7 +3,8 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
+
+import java.util.ArrayList;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
@@ -27,6 +28,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private Gauge exp_gauge;
     private float exp = 0;
     private float maxExp = 100;
+    private ArrayList<Gun> guns = new ArrayList<>();
 
     public void addExp(float exp) {
         this.exp += exp;
@@ -40,6 +42,10 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         this.exp -= this.maxExp;
         if( this.exp < 0.0f) this.exp = 0f;
         this.maxExp *= 2;
+    }
+
+    public void addGun(Gun gun) {
+        this.guns.add(gun);
     }
 
 
@@ -88,7 +94,10 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         setCamera(x,y);
         super.update();
 
-//        Log.d(TAG, "player_position = (" + x + ", " + y + ")");
+        // Gun Fire
+        for (Gun gun: guns)  {
+            gun.fire();
+        }
     }
 
     @Override

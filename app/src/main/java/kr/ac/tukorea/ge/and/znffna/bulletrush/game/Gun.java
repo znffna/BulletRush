@@ -51,11 +51,9 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         super(mipmapId);
     }
 
-    public Gun(MapObject object,MainScene.Layer targetLayer, float offset_x, float offset_y, int type){
+    public Gun(MapObject object, MainScene.Layer targetLayer, float offset_x, float offset_y, int type){
         super(R.mipmap.assault_rifle);
         init(object, targetLayer, offset_x, offset_y, type);
-
-
     }
 
     public static Gun get(MapObject object, MainScene.Layer targetLayer, float x, float y) {
@@ -114,10 +112,16 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         // Player 기준 상대 위치로 이동
         setPosition(Follow.getX() + GUN_OFFSET_X, Follow.getY() + GUN_OFFSET_Y, GUN_WIDTH, GUN_HEIGHT);
 
-        if (!findNearestTarget()) return;
+
+        // 총 격발 인터벌 갱신
         fireCoolTime -= GameView.frameTime;
+    }
+
+    public void fire() {
         if (fireCoolTime <= 0) {
             // 자신과 가장 가까운 enemy 조준
+            if (!findNearestTarget()) return;
+
             if (maxLength < MAX_RANGE) {
                 if (null == nearest) return;
                 float tx = nearest.getX();
@@ -166,12 +170,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         MainScene scene = (MainScene) Scene.top();
         if (scene == null) return;
 
-//        int score = scene.getScore();
-//        int power = 10 + score / 1000;
-
         this.angle = (float) Math.toDegrees(angle);
-//        Log.d(TAG, "fireBullet | angle= " + this.angle);
-
         Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(angle), y + GUN_HEIGHT / 2 * (float)Math.sin(angle), angle, power, targetLayer);
         scene.add(bullet);
     }

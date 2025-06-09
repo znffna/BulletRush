@@ -1,13 +1,11 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.view.MotionEvent;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class MainScene extends Scene {
@@ -34,6 +32,7 @@ public class MainScene extends Scene {
         Enemy.setTarget(player);
 
         Gun gun = new Gun(player, Layer.enemy,  50, 5, 0);
+        player.addGun(gun);
         add(Layer.gun, gun);
 
         add(Layer.player, player);
