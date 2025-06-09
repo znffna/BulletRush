@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.RectF;
 
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
@@ -162,26 +162,31 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     @Override
     public void update() {
+        PointF vec = calculateRelativeDirection();
+        // length를 통해 공격 or 이동 선택
+        if(vec.length() < range){
+            Attack();
+        }
+        else{
+            state = State.move;
+            updateVelocity(vec);
+        }
+        super.update();
+    }
+
+    private void updateVelocity(PointF shift) {
+        dx = SPEED * shift.x / shift.length();
+        dy = SPEED * shift.y / shift.length();
+    }
+
+    private PointF calculateRelativeDirection() {
         float deltaX = (float) (target.getX() - this.x);
         float deltaY = (float) (target.getY() - this.y);
         if (deltaX >  Metrics.worldWidth / 2) deltaX -= Metrics.worldWidth;
         if (deltaX < -Metrics.worldWidth / 2) deltaX += Metrics.worldWidth;
         if (deltaY >  Metrics.worldHeight / 2) deltaY -= Metrics.worldHeight;
         if (deltaY < -Metrics.worldHeight / 2) deltaY += Metrics.worldHeight;
-
-        float length = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        dx = SPEED * deltaX / length;
-        dy = SPEED * deltaY / length;
-
-        // length를 통해 공격 or 이동 선택
-        if(length < range){
-            Attack();
-        }
-        else{
-            state = State.move;
-
-        }
-        super.update();
+        return new PointF(deltaX, deltaY);
     }
 
     private void Attack() {
