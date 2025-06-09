@@ -170,33 +170,34 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         if (deltaY < -Metrics.worldHeight / 2) deltaY += Metrics.worldHeight;
 
         float length = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        dx = SPEED * deltaX / length;
+        dy = SPEED * deltaY / length;
+
         // length를 통해 공격 or 이동 선택
         if(length < range){
             Attack();
         }
         else{
-            dx = SPEED * deltaX / length;
-            dy = SPEED * deltaY / length;
+            state = State.move;
 
-            if(dx == 0 && dy == 0){
-                state = State.idle;
-            }
-            else{
-                state = State.move;
-            }
         }
         super.update();
     }
 
     private void Attack() {
         if (type == EnemyType.Normal){
-
+            dx = 0f;
+            dy = 0f;
+            state = State.idle;
         }
         else if (type == EnemyType.Rush){
-
+            dx *= 5;
+            dy *= 5;
         }
         else if (type == EnemyType.Gunner){
-
+            dx = 0f;
+            dy = 0f;
+            state = State.idle;
         }
     }
 

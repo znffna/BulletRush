@@ -93,9 +93,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     }
 
     @Override
-    public void onRecycle() {
-
-    }
+    public void onRecycle() {}
 
     public void setType(int type) {
         this.type = type;
