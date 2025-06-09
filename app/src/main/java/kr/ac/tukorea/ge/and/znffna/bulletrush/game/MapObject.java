@@ -6,11 +6,10 @@ import android.graphics.RectF;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
-public class MapObject extends Sprite implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
+public class MapObject extends AnimSprite implements IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
     public static void setCamera(float x, float y) {
         MapObject.camera.x = x;
@@ -20,7 +19,7 @@ public class MapObject extends Sprite implements IBoxCollidable, ILayerProvider<
     static PointF camera = new PointF();
 
     public MapObject(int mipmapId) {
-        super(mipmapId);
+        super(mipmapId, 1);
     }
 
     @Override

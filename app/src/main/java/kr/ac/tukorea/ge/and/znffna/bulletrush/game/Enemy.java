@@ -1,13 +1,17 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
+
+import java.util.ArrayList;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
@@ -47,16 +51,15 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
     public enum State {
-        idle, move
+        idle, move;
+
+        public static final int COUNT = values().length;
     }
     State state = State.idle;
-    private AnimSprite[] enemyAnimSprite;
+    private static ArrayList<ArrayList<Bitmap>> enemyBitmap = new ArrayList<>();; // [Type][State]
 
-    private static final int[] idle_resIds = {
-            R.mipmap.enemy_idle0,  R.mipmap.enemy_idle1,  R.mipmap.enemy_idle2
-    };
-
-    private static final int[] move_resIds = {
+    private static final int[] resource_resIds = {
+            R.mipmap.enemy_idle0, R.mipmap.enemy_idle1, R.mipmap.enemy_idle2,
             R.mipmap.enemy_move0, R.mipmap.enemy_move1, R.mipmap.enemy_move2
     };
 
@@ -76,10 +79,6 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     private void setType(EnemyType type) {
         this.type = type;
-        AnimSprite enemy_idle = new AnimSprite(idle_resIds[type.ordinal()], 5);
-        AnimSprite enemy_move = new AnimSprite(move_resIds[type.ordinal()], 5);
-        enemyAnimSprite = new AnimSprite[]{enemy_idle, enemy_move};
-
         if (type == EnemyType.Normal){
             this.maxLife = this.life = 100 + level * 40;
             this.power = 10 + level * 20;
@@ -125,11 +124,19 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
     public Enemy(float x, float y) {
-        this(0, x, y);
+        this(resource_resIds[0], x, y);
     }
 
     public Enemy(int mipmapId, float x, float y) {
         super(mipmapId);
+        if(enemyBitmap.isEmpty()){
+            for(int i = 0; i < EnemyType.COUNT; ++i){
+                enemyBitmap.add(new ArrayList<>());
+                for(int j = 0; j < State.COUNT; ++j){
+                    enemyBitmap.get(i).add(BitmapPool.get(resource_resIds[i * State.COUNT + j]));
+                }
+            }
+        }
     }
 
     public float[] getPosition() {
@@ -184,8 +191,8 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     public void draw(Canvas canvas) {
         // super.draw(canvas);
         setDstRectCameraSpace();
-        enemyAnimSprite[state.ordinal()].setPosition(px, py, ENEMY_WIDTH, ENEMY_HEIGHT);
-        enemyAnimSprite[state.ordinal()].draw(canvas);
+        bitmap = enemyBitmap.get(type.ordinal()).get(state.ordinal());
+        super.draw(canvas);
 
         float barSize = width * 2 / 3;
         if (gauge == null){
