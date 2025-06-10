@@ -4,6 +4,10 @@ import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.Contract;
+
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
@@ -44,20 +48,38 @@ public class MapObject extends AnimSprite implements IBoxCollidable, ILayerProvi
         super.draw(canvas);
     }
 
+    protected PointF getWrappedDelta(@NonNull PointF from, @NonNull PointF to){
+        return getWrappedDelta(from.x, from.y, to.x, to.y);
+    }
+
+    protected PointF getWrappedDelta(float from_x, float from_y, @NonNull PointF to){
+        return getWrappedDelta(from_x, from_y, to.x, to.y);
+    }
+
+    protected PointF getWrappedDelta(@NonNull PointF from, float to_x, float to_y){
+        return getWrappedDelta(from.x, from.y, to_x, to_y);
+    }
+
+
+    protected PointF getWrappedDelta(float from_x, float from_y, float to_x, float to_y) {
+        float deltaX = (float) (to_x - from_x);
+        float deltaY = (float) (to_y - from_y);
+        
+        if (deltaX >  Metrics.worldWidth / 2) deltaX -= Metrics.worldWidth;
+        if (deltaX < -Metrics.worldWidth / 2) deltaX += Metrics.worldWidth;
+        if (deltaY >  Metrics.worldHeight / 2) deltaY -= Metrics.worldHeight;
+        if (deltaY < -Metrics.worldHeight / 2) deltaY += Metrics.worldHeight;
+        
+        return new PointF(deltaX, deltaY);
+    }
+
     protected void calcuateDrawPosition() {
         // camera 좌표계로 이동
-        px = x - camera.x;
-        py = y - camera.y;
-
-        // wrap-round
-        if (px >  Metrics.worldWidth / 2) px -= Metrics.worldWidth;
-        if (px < -Metrics.worldWidth / 2) px += Metrics.worldWidth;
-        if (py >  Metrics.worldHeight / 2) py -= Metrics.worldHeight;
-        if (py < -Metrics.worldHeight / 2) py += Metrics.worldHeight;
+        PointF deltaPosition = getWrappedDelta(camera, x, y);
 
         // 실제 화면공간으로 이동시킨다.
-        px = px + Metrics.width / 2;
-        py = py + Metrics.height / 2;
+        px = deltaPosition.x + Metrics.width / 2;
+        py = deltaPosition.y + Metrics.height / 2;
     }
 
     public RectF getCollisionRect() {

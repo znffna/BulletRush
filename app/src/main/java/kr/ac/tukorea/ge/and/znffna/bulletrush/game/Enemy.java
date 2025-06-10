@@ -158,8 +158,9 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     @Override
     public void update() {
-        PointF vec = calculateRelativeDirection();
+        PointF vec = getWrappedDelta(x, y, target.getX(), target.getY());
         // length를 통해 공격 or 이동 선택
+        // 생각해보니 이 로직은 뭔가 이상함. 먼저 State에 따른 행동 분리. 및 State에 따른 행동 선택이 되도록 수정 필요
         if(vec.length() < range){
             Attack();
         }
@@ -175,15 +176,6 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         dy = SPEED * shift.y / shift.length();
     }
 
-    private PointF calculateRelativeDirection() {
-        float deltaX = (float) (target.getX() - this.x);
-        float deltaY = (float) (target.getY() - this.y);
-        if (deltaX >  Metrics.worldWidth / 2) deltaX -= Metrics.worldWidth;
-        if (deltaX < -Metrics.worldWidth / 2) deltaX += Metrics.worldWidth;
-        if (deltaY >  Metrics.worldHeight / 2) deltaY -= Metrics.worldHeight;
-        if (deltaY < -Metrics.worldHeight / 2) deltaY += Metrics.worldHeight;
-        return new PointF(deltaX, deltaY);
-    }
 
     private void Attack() {
         if (type == EnemyType.Normal){
