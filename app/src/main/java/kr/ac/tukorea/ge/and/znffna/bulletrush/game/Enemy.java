@@ -1,23 +1,18 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-import java.util.ArrayList;
-
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
@@ -161,17 +156,41 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         PointF vec = getWrappedDelta(x, y, target.getX(), target.getY());
         // length를 통해 공격 or 이동 선택
         // 생각해보니 이 로직은 뭔가 이상함. 먼저 State에 따른 행동 분리. 및 State에 따른 행동 선택이 되도록 수정 필요
+        moveTo(vec);
         if(vec.length() < range){
             Attack();
         }
         else{
             state = State.move;
-            updateVelocity(vec);
         }
         super.update();
+
+        float adjx = x;
+        PointF newVec = getWrappedDelta(x, y, target.getX(), target.getY());
+        if((vec.x < 0 && newVec.x > 0) || (vec.x > 0 && newVec.x < 0)){
+            adjx = target.getX();
+        }
+        if(adjx != x){
+            setPositionTo(adjx, y);
+        }
+        float adjy = y;
+        if((vec.y < 0 && newVec.y > 0) || (vec.y > 0 && newVec.y < 0)){
+            adjy = target.getY();
+        }
+        if(adjy != y){
+            setPositionTo(x, adjy);
+        }
+
+
     }
 
-    private void updateVelocity(PointF shift) {
+    private void setPositionTo(float x, float y) {
+        this.x = x;
+        this.y = y;
+        dstRect.offsetTo(x - width / 2, y - height / 2);
+    }
+
+    private void moveTo(PointF shift) {
         dx = SPEED * shift.x / shift.length();
         dy = SPEED * shift.y / shift.length();
     }
@@ -199,9 +218,13 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         // super.draw(canvas);
         setDstRectCameraSpace();
         setImageResourceId(resource_resIds[state.ordinal() * EnemyType.COUNT + type.ordinal()], 4);
+
         super.draw(canvas);
 
-        canvas.drawCircle(px, py, range, paint);
+        if(GameView.drawsDebugStuffs) {
+            // Range 출력
+            canvas.drawCircle(px, py, range, paint);
+        }
 
         // life 출력
         float barSize = width * 2 / 3;

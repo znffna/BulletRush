@@ -29,6 +29,10 @@ public class MapObject extends AnimSprite implements IBoxCollidable, ILayerProvi
     @Override
     public void update() {
         super.update();
+        warpedPosition();
+    }
+
+    protected void warpedPosition() {
         this.x = (x % Metrics.worldWidth + Metrics.worldWidth) % Metrics.worldWidth;
         this.y = (y % Metrics.worldHeight + Metrics.worldHeight) % Metrics.worldHeight;
         dstRect.offsetTo(x - width / 2, y - height / 2);
