@@ -6,8 +6,6 @@ import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
 
-import org.jetbrains.annotations.Contract;
-
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
@@ -29,9 +27,19 @@ public class MapObject extends AnimSprite implements IBoxCollidable, ILayerProvi
     @Override
     public void update() {
         super.update();
+        warpedPosition();
+    }
+
+    private void setPositionTo(float x, float y) {
+        this.x = x;
+        this.y = y;
+        dstRect.offsetTo(this.x - width / 2, this.y  - height / 2);
+    }
+
+    private void warpedPosition() {
         this.x = (x % Metrics.worldWidth + Metrics.worldWidth) % Metrics.worldWidth;
         this.y = (y % Metrics.worldHeight + Metrics.worldHeight) % Metrics.worldHeight;
-        dstRect.offsetTo(x - width / 2, y - height / 2);
+        setPositionTo(x, y);
     }
 
     float px;
@@ -39,7 +47,7 @@ public class MapObject extends AnimSprite implements IBoxCollidable, ILayerProvi
 
     void setDstRectCameraSpace(){
         calcuateDrawPosition();
-        dstRect.offsetTo(px - width / 2, py - height / 2);
+        setPositionTo(px, py);
     }
 
     @Override
