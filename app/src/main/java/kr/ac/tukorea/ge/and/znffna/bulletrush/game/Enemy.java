@@ -1,18 +1,23 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import java.util.ArrayList;
+
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
@@ -153,42 +158,17 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     @Override
     public void update() {
-        actByType();
-        super.update();
-    }
-
-    private void actByType() {
         PointF vec = getWrappedDelta(x, y, target.getX(), target.getY());
         // length를 통해 공격 or 이동 선택
-        // 생각해보니 이 로직은 뭔가 이상함. 먼저 EnemyType 따른 행동 분리. 및 State에 따른 행동 선택이 되도록 수정 필요
-        if (type == EnemyType.Normal){
-            if(vec.length() < range){
-                Attack();
-            }
-            else{
-                state = State.move;
-                updateVelocity(vec);
-            }
+        // 생각해보니 이 로직은 뭔가 이상함. 먼저 State에 따른 행동 분리. 및 State에 따른 행동 선택이 되도록 수정 필요
+        if(vec.length() < range){
+            Attack();
         }
-        else if (type == EnemyType.Rush){
-            if(vec.length() < range){
-                Attack();
-            }
-            else{
-                state = State.move;
-                updateVelocity(vec);
-            }
+        else{
+            state = State.move;
+            updateVelocity(vec);
         }
-        else if (type == EnemyType.Gunner){
-            if(vec.length() < range){
-                Attack();
-            }
-            else{
-                state = State.move;
-                updateVelocity(vec);
-            }
-        }
-
+        super.update();
     }
 
     private void updateVelocity(PointF shift) {
