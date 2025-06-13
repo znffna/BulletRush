@@ -10,7 +10,6 @@ import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
@@ -126,7 +125,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private float power;
     private float exp;
 
-    public boolean decreaseLife(int power) {
+    public boolean decreaseLife(float power) {
         life -= power;
         return life <= 0;
     }

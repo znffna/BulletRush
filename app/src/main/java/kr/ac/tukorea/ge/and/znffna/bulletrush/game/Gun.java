@@ -25,7 +25,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
 
     private int type;
-    private int power = 5;
+    private float power = 5f;
 
     private static final int[] resIds = {
         R.mipmap.assault_rifle, R.mipmap.assault_rifle_left
@@ -111,6 +111,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
         // 총 격발 인터벌 갱신
         fireCoolTime -= GameView.frameTime;
+        fire();
     }
 
     public void fire() {
@@ -190,4 +191,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     }
 
+    public void setPower(float attackPower) {
+        this.power = attackPower;
+    }
 }

@@ -13,15 +13,15 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
     private static final float SPEED = 400f;
     private static final float BULLET_WIDTH = 30f;
     private static final float BULLET_HEIGHT = BULLET_WIDTH;
-    private int power;
+    private float power;
     private float maxRange = 3.0f;
     private MainScene.Layer targetLayer;
 
-    public static Bullet get(float x, float y, float angle, int power, MainScene.Layer target) {
+    public static Bullet get(float x, float y, float angle, float power, MainScene.Layer target) {
         return Scene.top().getRecyclable(Bullet.class).init(x, y, angle, power, target);
     }
 
-    private Bullet init(float x, float y, float angle, int power, MainScene.Layer target) {
+    private Bullet init(float x, float y, float angle, float power, MainScene.Layer target) {
         setPosition(x, y, BULLET_WIDTH, BULLET_HEIGHT);
         this.dx = (float) (SPEED * Math.cos(angle));
         this.dy = (float) (SPEED * Math.sin(angle));
@@ -46,7 +46,7 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
     }
 
 
-    public int getPower() {
+    public float getPower() {
         return power;
     }
 

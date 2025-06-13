@@ -52,6 +52,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
 
     public void addGun(Gun gun) {
         this.guns.add(gun);
+        gun.setPower(this.attackPower);
     }
 
 
@@ -66,7 +67,8 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private final JoyStick joyStick;
 
     private float FIRE_INTERVAL = 0.25f;
-    private int power = 0;
+    // 총알의 damage 처리용
+    private float attackPower = 0;
 
     public Player(JoyStick joyStick) {
         super(0);
@@ -78,6 +80,8 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         this.state = State.idle;
         setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
 
+        maxLife = life = 100f;
+        attackPower = 50f;
     }
 
     public void update() {
@@ -100,10 +104,6 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         setCamera(x,y);
         super.update();
 
-        // Gun Fire
-        for (Gun gun: guns)  {
-            gun.fire();
-        }
     }
 
     @Override
@@ -136,7 +136,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private void drawStatus(Canvas canvas) {
         TextHelper.drawFontString(canvas, "EXP:" + (int)(this.exp), 0, 0, 32);
         TextHelper.drawFontString(canvas, "HP:" + (int)(this.life / this.maxLife * 100)+"%", 0, 40, 32);
-        TextHelper.drawFontString(canvas, "ATK:" + this.power, 0, 80, 32);
+        TextHelper.drawFontString(canvas, "ATK:" + (int)this.attackPower, 0, 80, 32);
     }
 
     @Override
