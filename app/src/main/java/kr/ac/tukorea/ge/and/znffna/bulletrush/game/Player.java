@@ -122,6 +122,8 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
             exp_gauge = new Gauge(exp_aspect, R.color.player_exp_fg, R.color.player_exp_bg, Paint.Cap.SQUARE);
         }
         exp_gauge.draw(canvas, 0f, expSize * exp_aspect / 2, expSize, exp / maxExp);
+
+        TextHelper.drawFontString(canvas, "EXP:" + (int)(this.exp), 0, 0);
     }
 
     @Override

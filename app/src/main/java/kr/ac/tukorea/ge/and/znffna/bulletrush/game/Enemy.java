@@ -64,9 +64,9 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
 
     private static final int[] resource_resIds = {
-            R.mipmap.enemy_idle0, R.mipmap.enemy_move0,
-            R.mipmap.enemy_idle1, R.mipmap.enemy_move1,
-            R.mipmap.enemy_idle2, R.mipmap.enemy_move2
+            R.mipmap.enemy_idle0, R.mipmap.enemy_move0, R.mipmap.enemy_idle0, R.mipmap.enemy_idle0,
+            R.mipmap.enemy_idle1, R.mipmap.enemy_move1, R.mipmap.enemy_idle1, R.mipmap.enemy_idle1,
+            R.mipmap.enemy_idle2, R.mipmap.enemy_move2, R.mipmap.enemy_idle2, R.mipmap.enemy_idle2
     };
 
     private static MapObject target;
