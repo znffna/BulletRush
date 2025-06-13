@@ -42,7 +42,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     private float ENEMY_WIDTH = 100f;
     private float ENEMY_HEIGHT = ENEMY_WIDTH;
-    private float SPEED = 200f;
+    private float speed = 200f;
     private Gauge gauge;
 
     public float getExp() {
@@ -98,12 +98,14 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             this.power = 10 + level * 20;
             this.exp = (float)Math.pow(1.5f, level) * 100;
             this.range = ENEMY_WIDTH * 1.5f;
+            this.speed = 200f;
         }
         else if (type == EnemyType.Rush){
             this.maxLife = this.life = 100 + level * 40;
             this.power = 40 + level * 40;
             this.exp = (float)Math.pow(3.0f, level) * 100;
             this.range = ENEMY_WIDTH * 6.0f;
+            this.speed = 200f;
         }
         else if (type == EnemyType.Gunner){
             this.maxLife = this.life = 100 + level * 40;
@@ -113,6 +115,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             this.gun.setFIRE_INTERVAL(2.0f);
             Scene.top().add(this.gun);
             this.range = ENEMY_WIDTH * 6.0f;
+            this.speed = 200f;
         }
     }
 
@@ -197,8 +200,8 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
     private void moveTo(PointF shift) {
-        dx = SPEED * shift.x / shift.length();
-        dy = SPEED * shift.y / shift.length();
+        dx = speed * shift.x / shift.length();
+        dy = speed * shift.y / shift.length();
     }
 
 
@@ -211,7 +214,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         else if (type == EnemyType.Rush){
             if(state == State.idle || state == State.move){
                 state = State.rush;
-                SPEED = 600;
+                speed = 600;
             }
         }
         else if (type == EnemyType.Gunner){

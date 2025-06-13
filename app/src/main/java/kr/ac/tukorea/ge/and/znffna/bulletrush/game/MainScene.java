@@ -61,7 +61,8 @@ public class MainScene extends Scene {
         super.draw(canvas);
 
         // draw PlayTime
-        TextHelper.drawFontString(canvas, String.format("%02d:%02d", (int)playTime / 60, (int)playTime % 60), (int) (Metrics.width / 2) - 80, 0, 40);
+        int fontSize = 40;
+        TextHelper.drawFontString(canvas, String.format("%02d:%02d", (int)playTime / 60, (int)playTime % 60), (int) (Metrics.width / 2) - (int)(fontSize * 2.5), 0, fontSize);
     }
 
     @Override
