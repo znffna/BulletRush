@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class MainScene extends Scene {
@@ -13,6 +14,8 @@ public class MainScene extends Scene {
 
     private final Player player;
     private final JoyStick joyStick;
+
+    private float playTime = 0f;
 
     public void addExp(float exp) {
         player.addExp(exp);
@@ -49,12 +52,16 @@ public class MainScene extends Scene {
     // Game Loop Functions
     @Override
     public void update() {
+        playTime += GameView.frameTime;
         super.update();
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
+
+        // draw PlayTime
+        TextHelper.drawFontString(canvas, String.format("%02d:%02d", (int)playTime / 60, (int)playTime % 60), (int) (Metrics.width / 2) - 80, 0, 40);
     }
 
     @Override
