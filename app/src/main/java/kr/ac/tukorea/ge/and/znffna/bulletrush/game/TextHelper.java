@@ -11,6 +11,8 @@ public class TextHelper {
     private static Bitmap fontBitmap;
     private static int cellWidth = 24;
     private static int cellHeight = 32;
+
+    private static float cellAspect =  (float)cellWidth / cellHeight;
     private static int columns = 10;
 
     // 포함된 모든 문자 (Python 생성 시와 일치해야 함)
@@ -18,7 +20,7 @@ public class TextHelper {
 
     public TextHelper() {}
 
-    public static void drawFontChar(Canvas canvas, char ch, int destX, int destY) {
+    public static void drawFontChar(Canvas canvas, char ch, int destX, int destY, int fontSize) {
         if(fontBitmap == null) {
             fontBitmap = BitmapPool.get(R.mipmap.ascii_sprite);
         }
@@ -41,8 +43,8 @@ public class TextHelper {
         Rect destRect = new Rect(
                 destX,
                 destY,
-                destX + cellWidth,
-                destY + cellHeight
+                destX + fontSize,
+                destY + (int)(fontSize / cellAspect)
         );
 
         // 출력
@@ -50,10 +52,14 @@ public class TextHelper {
     }
 
     public static void drawFontString(Canvas canvas, String str, int startX, int startY) {
+        drawFontString(canvas, str, startX, startY, cellWidth);
+    }
+
+    public static void drawFontString(Canvas canvas, String str, int startX, int startY,int fontSize) {
         int x = startX;
         for (char ch : str.toCharArray()) {
-            drawFontChar(canvas, ch, x, startY);
-            x += cellWidth;  // 고정 폭 기준 이동
+            drawFontChar(canvas, ch, x, startY, fontSize);
+            x += fontSize;  // 고정 폭 기준 이동
         }
     }
 }

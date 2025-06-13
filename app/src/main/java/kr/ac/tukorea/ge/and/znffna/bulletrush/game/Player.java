@@ -38,10 +38,16 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     }
 
     private void addLevel() {
-        this.level += 1;
+        setLevel(this.level + 1);
+
+        // exp 재설정
         this.exp -= this.maxExp;
         if( this.exp < 0.0f) this.exp = 0f;
         this.maxExp *= 2;
+    }
+
+    private void setLevel(int level) {
+        this.level = level;
     }
 
     public void addGun(Gun gun) {
@@ -122,8 +128,15 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
             exp_gauge = new Gauge(exp_aspect, R.color.player_exp_fg, R.color.player_exp_bg, Paint.Cap.SQUARE);
         }
         exp_gauge.draw(canvas, 0f, expSize * exp_aspect / 2, expSize, exp / maxExp);
+        
+        // Status 문자 출력
+        drawStatus(canvas);
+    }
 
-        TextHelper.drawFontString(canvas, "EXP:" + (int)(this.exp), 0, 0);
+    private void drawStatus(Canvas canvas) {
+        TextHelper.drawFontString(canvas, "EXP:" + (int)(this.exp), 0, 0, 32);
+        TextHelper.drawFontString(canvas, "HP:" + (int)(this.life / this.maxLife * 100)+"%", 0, 40, 32);
+        TextHelper.drawFontString(canvas, "ATK:" + this.power, 0, 80, 32);
     }
 
     @Override
