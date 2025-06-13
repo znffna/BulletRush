@@ -33,7 +33,6 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private MapObject Follow;
     private float GUN_OFFSET_Y = 0f;
     private float GUN_OFFSET_X = 0f;
-
     public void setFIRE_INTERVAL(float FIRE_INTERVAL) {
         this.FIRE_INTERVAL = FIRE_INTERVAL;
     }
@@ -109,7 +108,6 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         super.update();
         // Player 기준 상대 위치로 이동
         setPosition(Follow.getX() + GUN_OFFSET_X, Follow.getY() + GUN_OFFSET_Y, GUN_WIDTH, GUN_HEIGHT);
-
 
         // 총 격발 인터벌 갱신
         fireCoolTime -= GameView.frameTime;

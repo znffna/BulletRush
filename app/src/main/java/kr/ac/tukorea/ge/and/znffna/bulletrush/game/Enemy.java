@@ -10,6 +10,7 @@ import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Sprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
@@ -50,7 +51,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
     public enum State {
-        idle, move;
+        idle, move, rush, stun;
 
         public static final int COUNT = values().length;
     }
@@ -153,18 +154,23 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     @Override
     public void update() {
+        // 플레이어와의 상대적 위치 계산
         PointF vec = getWrappedDelta(x, y, target.getX(), target.getY());
-        // length를 통해 공격 or 이동 선택
-        // 생각해보니 이 로직은 뭔가 이상함. 먼저 State에 따른 행동 분리. 및 State에 따른 행동 선택이 되도록 수정 필요
-        moveTo(vec);
+        updateByType(vec);
+    }
+
+    private void updateByType(PointF vec) {
+        // Type에 따른 State 변경 - State는 Bitmap 선택과 관련
         if(vec.length() < range){
-            Attack();
+            Attack(vec);
         }
         else{
             state = State.move;
+            moveTo(vec);
         }
         super.update();
 
+        // 목표 위치를 넘지 않도록 위치 수정.
         float adjx = x;
         PointF newVec = getWrappedDelta(x, y, target.getX(), target.getY());
         if((vec.x < 0 && newVec.x > 0) || (vec.x > 0 && newVec.x < 0)){
@@ -180,8 +186,6 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         if(adjy != y){
             setPositionTo(x, adjy);
         }
-
-
     }
 
     private void setPositionTo(float x, float y) {
@@ -196,15 +200,17 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
 
-    private void Attack() {
+    private void Attack(PointF vec) {
         if (type == EnemyType.Normal){
             dx = 0f;
             dy = 0f;
             state = State.idle;
         }
         else if (type == EnemyType.Rush){
-            dx *= 5;
-            dy *= 5;
+            if(state == State.idle || state == State.move){
+                state = State.rush;
+                SPEED = 600;
+            }
         }
         else if (type == EnemyType.Gunner){
             dx = 0f;
