@@ -59,12 +59,14 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     State state = State.idle;
     public void setState(State state) {
         this.state = state;
+        setImageResourceId(resource_resIds[this.type.ordinal() * State.COUNT + state.ordinal()], 4);
     }
 
 
     private static final int[] resource_resIds = {
-            R.mipmap.enemy_idle0, R.mipmap.enemy_idle1, R.mipmap.enemy_idle2,
-            R.mipmap.enemy_move0, R.mipmap.enemy_move1, R.mipmap.enemy_move2
+            R.mipmap.enemy_idle0, R.mipmap.enemy_move0,
+            R.mipmap.enemy_idle1, R.mipmap.enemy_move1,
+            R.mipmap.enemy_idle2, R.mipmap.enemy_move2
     };
 
     private static MapObject target;
@@ -166,6 +168,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         }
         else{
             state = State.move;
+            setState(State.move);
             moveTo(vec);
         }
         super.update();
@@ -223,7 +226,6 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     public void draw(Canvas canvas) {
         // super.draw(canvas);
         setDstRectCameraSpace();
-        setImageResourceId(resource_resIds[state.ordinal() * EnemyType.COUNT + type.ordinal()], 4);
 
         super.draw(canvas);
 
