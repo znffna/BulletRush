@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.CollisionHelper;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
 public class CollisionChecker implements IGameObject {
     private static final String TAG = CollisionChecker.class.getSimpleName();
@@ -19,8 +20,8 @@ public class CollisionChecker implements IGameObject {
     @Override
     public void update() {
         EnemyToBullet();
-//        PlayerToBullet();
-//        PlayerToEnemy();
+        PlayerToBullet();
+        PlayerToEnemy();
     }
 
     private void PlayerToEnemy() {
@@ -32,12 +33,11 @@ public class CollisionChecker implements IGameObject {
                 Enemy enemy = (Enemy)enemies.get(e);
                 if (CollisionHelper.collides(player, enemy)) {
                     Log.d(TAG, "Collision !! : Player@" + System.identityHashCode(player) + " vs Enemy@" + System.identityHashCode(enemy));
-//                    boolean dead = enemy.decreaseLife(bullet.getPower());
-//                    if (dead) {
-//                        scene.remove(MainScene.Layer.enemy, enemy);
-//                        scene.addScore(enemy.getScore());
-//                        // removed = true;
-//                    }
+                    boolean dead = player.decreaseLife(enemy.getPower());
+                    if (dead) {
+                        // TODO :: 게임 결과 화면 띄우기
+                        GameView.view.popScene();
+                    }
                     break;
                 }
             }
@@ -56,12 +56,11 @@ public class CollisionChecker implements IGameObject {
                 if (CollisionHelper.collides(player, bullet)) {
                     Log.d(TAG, "Collision !! : Bullet@" + System.identityHashCode(bullet) + " vs Player@" + System.identityHashCode(player));
                     scene.remove(bullet);
-//                    boolean dead = enemy.decreaseLife(bullet.getPower());
-//                    if (dead) {
-//                        scene.remove(MainScene.Layer.enemy, enemy);
-//                        scene.addScore(enemy.getScore());
-//                        // removed = true;
-//                    }
+                    boolean dead = player.decreaseLife(bullet.getPower());
+                    if (dead) {
+                        // TODO :: 게임 결과 화면 띄우기
+                        GameView.view.popScene();
+                    }
                     break;
                 }
             }

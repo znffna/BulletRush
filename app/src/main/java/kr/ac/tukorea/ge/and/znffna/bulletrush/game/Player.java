@@ -55,6 +55,11 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         gun.setPower(this.attackPower);
     }
 
+    public boolean decreaseLife(float power) {
+        life -= power;
+        return life <= 0;
+    }
+
 
     public enum State {
         idle, move
@@ -122,8 +127,8 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         health_gauge.draw(canvas, Metrics.width / 2 - barSize / 2, Metrics.height / 2 + barSize / 2 + 30, barSize, life / maxLife);
 
         // exp 출력
-        float exp_aspect = 0.2f;
-        float expSize = Metrics.width * 1 / 4;
+        float exp_aspect = 0.05f;
+        float expSize = Metrics.width;
         if (exp_gauge == null){
             exp_gauge = new Gauge(exp_aspect, R.color.player_exp_fg, R.color.player_exp_bg, Paint.Cap.SQUARE);
         }
@@ -134,7 +139,8 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     }
 
     private void drawStatus(Canvas canvas) {
-        TextHelper.drawFontString(canvas, "EXP:" + (int)(this.exp), 0, 0, 32);
+        TextHelper.drawFontString(canvas, "LEVEL:" + (int)(this.level), 0, 0, 32);
+//        TextHelper.drawFontString(canvas, "EXP:" + (int)(this.exp), 0, 0, 32);
         TextHelper.drawFontString(canvas, "HP:" + (int)(this.life / this.maxLife * 100)+"%", 0, 40, 32);
         TextHelper.drawFontString(canvas, "ATK:" + (int)this.attackPower, 0, 80, 32);
     }
