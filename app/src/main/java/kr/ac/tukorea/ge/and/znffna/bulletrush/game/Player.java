@@ -20,6 +20,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private static final String TAG = Player.class.getSimpleName();
     private static final float PLAYER_WIDTH = 100f;
     private static final float PLAYER_HEIGHT = PLAYER_WIDTH;
+    private static final float INVINCIBILITY_TIME = 0.5f;
     private Gauge health_gauge;
     private float life = 100;
     private float maxLife = 100;
@@ -29,6 +30,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private float exp = 0;
     private float maxExp = 100;
     private final ArrayList<Gun> guns = new ArrayList<>();
+    private float hitTime; // 해당 시간값이 음수여야만 실제 충돌처리.
 
     public void addExp(float exp) {
         this.exp += exp;
@@ -57,7 +59,10 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     }
 
     public boolean decreaseLife(float power) {
-        life -= power;
+        if(hitTime < 0.0f) {
+            hitTime = INVINCIBILITY_TIME;
+            life -= power;
+        }
         return life <= 0;
     }
 
@@ -91,6 +96,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     }
 
     public void update() {
+        hitTime -= GameView.frameTime;
         if (joyStick.power <= 0) {
             state = State.idle;
             dx = 0;

@@ -56,7 +56,7 @@ public class CollisionChecker implements IGameObject {
                 if(player.getLayer() != layer) continue;
                 if (CollisionHelper.collides(player, bullet)) {
                     Log.d(TAG, "Collision !! : Bullet@" + System.identityHashCode(bullet) + " vs Player@" + System.identityHashCode(player));
-                    scene.remove(bullet);
+                    bullet.onHitted();
                     boolean dead = player.decreaseLife(bullet.getPower());
                     if (dead) {
                         // TODO :: 게임 결과 화면 띄우기
@@ -80,7 +80,7 @@ public class CollisionChecker implements IGameObject {
                 if(enemy.getLayer() != layer) continue;
                 if (CollisionHelper.collides(enemy, bullet)) {
                     Log.d(TAG, "Collision !! : Bullet@" + System.identityHashCode(bullet) + " vs Enemy@" + System.identityHashCode(enemy));
-                    scene.remove(bullet);
+                    bullet.onHitted();
                     boolean dead = enemy.decreaseLife(bullet.getPower());
                     if (dead) {
                         enemy.hasDied();
