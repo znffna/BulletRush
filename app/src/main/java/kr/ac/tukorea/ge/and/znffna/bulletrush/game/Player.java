@@ -123,8 +123,14 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         // super.draw(canvas);
         // 맵 중앙 고정 출력
         RectUtil.setRect(dstRect, Metrics.width / 2, Metrics.height / 2, width, height);
-        playerAnimSprite[state.ordinal()].setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
-        playerAnimSprite[state.ordinal()].draw(canvas);
+        if(hitTime > 0.0f && (int)(hitTime / 0.16f) % 2 == 1){
+            // 무적판정시 출력 안시키는 깜빡이 효과 부여
+        }
+        else{
+            playerAnimSprite[state.ordinal()].setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
+            playerAnimSprite[state.ordinal()].draw(canvas);
+        }
+
         
         // life 출력
         float barSize = width * 2 / 3;
