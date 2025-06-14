@@ -25,7 +25,10 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     public void hasDied() {
         GameView.view.getTopScene().remove(MainScene.Layer.enemy, this);
-        if(this.gun != null) GameView.view.getTopScene().remove(MainScene.Layer.gun, this.gun);
+        if(this.gun != null) {
+            GameView.view.getTopScene().remove(MainScene.Layer.gun, this.gun);
+            this.gun = null;
+        }
     }
 
     public enum EnemyType {
@@ -85,6 +88,9 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(1.5f);
         }
+
+        dx = 0f;
+        dy = 0f;
 
         paint.setColor(rangeColor[type.ordinal()]);
 
