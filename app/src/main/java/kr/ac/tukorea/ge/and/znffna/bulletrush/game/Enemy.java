@@ -72,7 +72,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         return exp;
     }
 
-    public void setState(State state) {
+    public void setState(State state, float time) {
         if (this.state == state) return;
 
         switch (state) {
@@ -96,6 +96,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
                         break;
                     case Rush:
                         speed = DEFAULT_SPEED;
+                        stunTime = time;
                         break;
                 }
                 break;
@@ -118,7 +119,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     private Enemy init(float x, float y, int level, EnemyType type) {
         setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
-        setState(State.idle);
+        setState(State.idle, 2.0f);
         this.level = level;
         setType(type);
 
@@ -192,10 +193,6 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         super(mipmapId);
     }
 
-    public float[] getPosition() {
-        return new float[]{this.x, this.y};
-    }
-
     public static void setTarget(Player target) {
         Enemy.target = target;
     }
@@ -222,7 +219,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
                 if (vec.length() < range) {
                     Attack(vec);
                 } else {
-                    setState(State.move);
+                    setState(State.move, 2.0f);
                     moveTo(vec);
                 }
                 super.update();
@@ -249,15 +246,16 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
                     case Normal:
                     case Gunner:
                         // 공격 사거리를 벗어날 경우 attack 상태를 벗어난다.
+                        super.update();
                         if (vec.length() >= range) {
-                            setState(State.idle);
+                            setState(State.idle, 2.0f);
                         }
                         break;
                     case Rush:
                         super.update();
                         newVec = WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY());
                         if (abs(newVec.x) > Metrics.width / 2 || abs(newVec.y) > Metrics.height / 2 ) {
-                            setState(State.stun);
+                            setState(State.stun, 2.0f);
                         }
                         break;
                 }
@@ -265,7 +263,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             case stun:
                 stunTime -= GameView.frameTime;
                 if (stunTime < 0.0f) {
-                    setState(State.idle);
+                    setState(State.idle, 2.0f);
                 }
                 break;
         }
@@ -284,7 +282,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
 
     private void Attack(PointF vec) {
-        setState(State.attack);
+        setState(State.attack, 2.0f);
         switch (type) {
             case Normal:
             case Gunner:
@@ -293,7 +291,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
                 if (gun != null) gun.resetCoolTime();
                 break;
             case Rush:
-                setState(State.attack);
+                setState(State.attack, 2.0f);
                 moveTo(vec);
                 break;
         }
