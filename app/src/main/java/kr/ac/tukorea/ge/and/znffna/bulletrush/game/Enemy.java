@@ -1,5 +1,7 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
+import static java.lang.Math.abs;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -253,7 +255,8 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
                         break;
                     case Rush:
                         super.update();
-                        if (WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY()).length() > Metrics.height) {
+                        newVec = WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY());
+                        if (abs(newVec.x) > Metrics.width / 2 || abs(newVec.y) > Metrics.height / 2 ) {
                             setState(State.stun);
                         }
                         break;

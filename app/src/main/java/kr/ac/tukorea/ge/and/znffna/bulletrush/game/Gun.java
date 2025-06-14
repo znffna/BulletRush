@@ -4,11 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.RectF;
 
 import java.util.ArrayList;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
+import kr.ac.tukorea.ge.and.znffna.bulletrush.util.WarpUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
@@ -141,7 +143,8 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
             if (maxLength < MAX_RANGE) {
                 float tx = nearestTarget.getX();
                 float ty = nearestTarget.getY();
-                fireBullet((float) Math.atan2(ty - this.y, tx - this.x));
+                PointF wPos = WarpUtil.getWrappedDelta(x, y, tx, ty);
+                fireBullet((float) Math.atan2(wPos.y, wPos.x));
                 fireCoolTime = FIRE_INTERVAL;
             }
         }
