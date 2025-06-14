@@ -1,8 +1,6 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
-import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.util.Log;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
@@ -26,8 +24,6 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
     private float power;
     private float maxRange = 3.0f;
     private MainScene.Layer targetLayer;
-    public boolean isHit = false;
-    private float outputPowerTime = DEFAULT_POWER_OUTPUT;
 
     public static Bullet get(float x, float y, float angle, float power, MainScene.Layer target, float speed) {
         return Scene.top().getRecyclable(Bullet.class).init(x, y, angle, power, target, speed);
@@ -41,21 +37,12 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
         this.power = power;
         this.maxRange = 1000.0f;
         this.targetLayer = target;
-        this.isHit = false;
-        this.outputPowerTime = DEFAULT_POWER_OUTPUT;
         return this;
     }
 
     @Override
     public void update() {
         super.update();
-        if(isHit) {
-            outputPowerTime -= GameView.frameTime;
-            if(outputPowerTime < 0.0f){
-                Scene.top().remove(this);
-                return;
-            }
-        };
 
         maxRange -= speed * GameView.frameTime;
         if (maxRange < 0.0f){
@@ -91,21 +78,8 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
         return targetLayer;
     }
 
-    @Override
-    public void draw(Canvas canvas) {
-        if(isHit){
-            setDstRectCameraSpace();
-            TextHelper.drawFontString(canvas, "" + (int)this.power, (int)px, (int)py, 50);
-        }
-        else super.draw(canvas);
-    }
-
-    public void onHitted() {
-        Log.v(TAG,"onHitted Bullet");
-        isHit = true;
-
-        // 출력될 Text를 위로 이동시킨다.
-        dx = 0f;
-        dy = -50f;
+    public void onHit() {
+        Scene.top().add(new HitPopup("" + (int)this.power, px, py, 40, 0f, -50f));
+        Scene.top().remove(this);
     }
 }

@@ -39,6 +39,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private float GUN_OFFSET_X = 0f;
     private static Paint paint;
     private float speed = Bullet.SPEED;
+    private float radianAngle;
 
     public void setRange(float range) {
         this.range = range;
@@ -142,10 +143,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
             if (nearestTarget == null) return;
 
             if (maxLength < MAX_RANGE) {
-                float tx = nearestTarget.getX();
-                float ty = nearestTarget.getY();
-                PointF wPos = WarpUtil.getWrappedDelta(x, y, tx, ty);
-                fireBullet((float) Math.atan2(wPos.y, wPos.x));
+                fireBullet();
                 fireCoolTime = FIRE_INTERVAL;
             }
         }
@@ -153,9 +151,9 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     private float maxLength;
     private final float MAX_RANGE = Math.min(Metrics.width, Metrics.height);
-    private boolean findNearestTarget() {
+    private void findNearestTarget() {
         Scene scene = Scene.top();
-        if(scene == null) return false;
+        if(scene == null) return;
 
         maxLength = range * range;
         MapObject bfNear = nearestTarget;
@@ -174,7 +172,14 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         }
 
         maxLength = (float) Math.sqrt(maxLength);
-        return true;
+
+        if(nearestTarget != null){
+            float tx = nearestTarget.getX();
+            float ty = nearestTarget.getY();
+            PointF wPos = WarpUtil.getWrappedDelta(x, y, tx, ty);
+            this.radianAngle = (float) Math.atan2(wPos.y, wPos.x);
+            this.angle = (float)Math.toDegrees(this.radianAngle);
+        }
     }
 
     private final float SPARK_DURATION = 0.1f;
@@ -185,12 +190,11 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private RectF sparkRect;
     private Bitmap sparkBitmap;
 
-    private void fireBullet(float angle) {
+    private void fireBullet() {
         MainScene scene = (MainScene) Scene.top();
         if (scene == null) return;
 
-        this.angle = (float) Math.toDegrees(angle);
-        Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(angle), y + GUN_HEIGHT / 2 * (float)Math.sin(angle), angle, power, targetLayer, speed);
+        Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(radianAngle), y + GUN_HEIGHT / 2 * (float)Math.sin(radianAngle), radianAngle, power, targetLayer, speed);
         scene.add(bullet);
     }
 
