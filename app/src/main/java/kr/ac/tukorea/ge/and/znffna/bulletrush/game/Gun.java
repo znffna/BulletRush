@@ -4,13 +4,11 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.RectF;
 
 import java.util.ArrayList;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
-import kr.ac.tukorea.ge.and.znffna.bulletrush.util.WarpUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
@@ -24,8 +22,8 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene.Layer> {
 
     private static final String TAG = Gun.class.getSimpleName();
-    private float GUN_WIDTH = 112f;
-    private float GUN_HEIGHT = 40f;
+    private final float GUN_WIDTH = 112f;
+    private final float GUN_HEIGHT = 40f;
 
 
     private int type;
@@ -38,6 +36,11 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private float GUN_OFFSET_Y = 0f;
     private float GUN_OFFSET_X = 0f;
     private static Paint paint;
+
+    public void setRange(float range) {
+        this.range = range;
+    }
+
     private float range = 500f;
 
     public void setFIRE_INTERVAL(float FIRE_INTERVAL) {
@@ -49,7 +52,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
 
     private MainScene.Layer targetLayer;
-    private MapObject nearest;
+    private MapObject nearestTarget;
     private float angle;
 
 
@@ -124,6 +127,8 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         setPosition(Follow.getX() + GUN_OFFSET_X, Follow.getY() + GUN_OFFSET_Y, GUN_WIDTH, GUN_HEIGHT);
 
         // 총 격발 인터벌 갱신
+        findNearestTarget();
+
         fireCoolTime -= GameView.frameTime;
         fire();
     }
@@ -131,12 +136,11 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     public void fire() {
         if (fireCoolTime <= 0) {
             // 자신과 가장 가까운 enemy 조준
-            if (!findNearestTarget()) return;
+            if (nearestTarget == null) return;
 
             if (maxLength < MAX_RANGE) {
-                if (null == nearest) return;
-                float tx = nearest.getX();
-                float ty = nearest.getY();
+                float tx = nearestTarget.getX();
+                float ty = nearestTarget.getY();
                 fireBullet((float) Math.atan2(ty - this.y, tx - this.x));
                 fireCoolTime = FIRE_INTERVAL;
             }
@@ -150,8 +154,8 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         if(scene == null) return false;
 
         maxLength = range * range;
-        MapObject bfNear = nearest;
-        nearest = null;
+        MapObject bfNear = nearestTarget;
+        nearestTarget = null;
         ArrayList<IGameObject> targets = Scene.top().objectsAt(targetLayer);
         for (IGameObject target : targets) {
             if (target instanceof MapObject) {
@@ -159,7 +163,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
                 float ty = ((Sprite) target).getY();
                 float length = (tx - x) * (tx - x) + (ty - y) * (ty - y);
                 if (length < maxLength){
-                    nearest = ((MapObject)target);
+                    nearestTarget = ((MapObject)target);
                     maxLength = length;
                 }
             }
@@ -169,10 +173,10 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         return true;
     }
 
-    private float SPARK_DURATION = 0.1f;
-    private float SPARK_OFFSET = 66f;
-    private float SPARK_WIDTH = GUN_WIDTH / 2;
-    private float SPARK_HEIGHT = SPARK_WIDTH * 3 / 5;
+    private final float SPARK_DURATION = 0.1f;
+    private final float SPARK_OFFSET = 66f;
+    private final float SPARK_WIDTH = GUN_WIDTH / 2;
+    private final float SPARK_HEIGHT = SPARK_WIDTH * 3 / 5;
 
     private RectF sparkRect;
     private Bitmap sparkBitmap;
@@ -195,7 +199,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         canvas.drawBitmap(bitmap, srcRect, dstRect, null);
 
         // 사격 사거리 출력
-        canvas.drawCircle(x, y, range, paint);
+//        canvas.drawCircle(x, y, range, paint);
 
         // 격발 이미지 출력
         if (FIRE_INTERVAL - fireCoolTime < SPARK_DURATION) {
@@ -208,5 +212,9 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     public void setPower(float attackPower) {
         this.power = attackPower;
+    }
+
+    public void resetCoolTime() {
+        fireCoolTime = FIRE_INTERVAL;
     }
 }

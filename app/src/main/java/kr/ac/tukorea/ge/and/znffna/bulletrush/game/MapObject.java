@@ -35,6 +35,12 @@ public class MapObject extends AnimSprite implements IBoxCollidable, ILayerProvi
         dstRect.offsetTo(x - width / 2, y - height / 2);
     }
 
+    @Override
+    public void setPosition(float x, float y, float width, float height) {
+        super.setPosition(x, y, width, height);
+        warpedPosition();
+    }
+
     float px;
     float py;
 
@@ -48,8 +54,6 @@ public class MapObject extends AnimSprite implements IBoxCollidable, ILayerProvi
         setDstRectCameraSpace();
         super.draw(canvas);
     }
-
-
 
     protected void calcuateDrawPosition() {
         // camera 좌표계로 이동

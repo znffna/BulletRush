@@ -28,7 +28,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private Gauge exp_gauge;
     private float exp = 0;
     private float maxExp = 100;
-    private ArrayList<Gun> guns = new ArrayList<>();
+    private final ArrayList<Gun> guns = new ArrayList<>();
 
     public void addExp(float exp) {
         this.exp += exp;
@@ -53,6 +53,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     public void addGun(Gun gun) {
         this.guns.add(gun);
         gun.setPower(this.attackPower);
+        gun.setFIRE_INTERVAL(1.0f);
     }
 
     public boolean decreaseLife(float power) {
@@ -68,10 +69,10 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private final AnimSprite[] playerAnimSprite;
 
 
-    private float SPEED;
+    private final float SPEED;
     private final JoyStick joyStick;
 
-    private float FIRE_INTERVAL = 0.25f;
+    private final float FIRE_INTERVAL = 0.25f;
     // 총알의 damage 처리용
     private float attackPower = 0;
 
@@ -139,7 +140,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     }
 
     private void drawStatus(Canvas canvas) {
-        TextHelper.drawFontString(canvas, "LEVEL:" + (int)(this.level), 0, 0, 32);
+        TextHelper.drawFontString(canvas, "LEVEL:" + this.level, 0, 0, 32);
 //        TextHelper.drawFontString(canvas, "EXP:" + (int)(this.exp), 0, 0, 32);
         TextHelper.drawFontString(canvas, "HP:" + (int)(this.life / this.maxLife * 100)+"%", 0, 40, 32);
         TextHelper.drawFontString(canvas, "ATK:" + (int)this.attackPower, 0, 80, 32);

@@ -9,7 +9,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class ScrollBackground extends Sprite {
-    private Player player;
+    private final Player player;
 
     private float curr_x;
     private float curr_y;
@@ -36,7 +36,8 @@ public class ScrollBackground extends Sprite {
 
     @Override
     public void update() {
-        if(player == null) return;
+        if(player == null) {
+        }
     }
 
     @Override

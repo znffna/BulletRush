@@ -9,11 +9,11 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 
 public class TextHelper {
     private static Bitmap fontBitmap;
-    private static int cellWidth = 24;
-    private static int cellHeight = 32;
+    private static final int cellWidth = 24;
+    private static final int cellHeight = 32;
 
-    private static float cellAspect =  (float)cellWidth / cellHeight;
-    private static int columns = 10;
+    private static final float cellAspect =  (float)cellWidth / cellHeight;
+    private static final int columns = 10;
 
     // 포함된 모든 문자 (Python 생성 시와 일치해야 함)
     private static final String FONT_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&*()-_=+[]{}:;";

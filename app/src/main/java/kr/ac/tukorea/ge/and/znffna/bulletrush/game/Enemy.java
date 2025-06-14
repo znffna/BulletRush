@@ -14,24 +14,11 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.and.znffna.bulletrush.util.WarpUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
 
-
-    private int level;
-    private Gun gun;
-    private float range;
-    private Paint paint;
-    private final int[] rangeColor = {Color.CYAN, Color.YELLOW, Color.RED};
-
-    public void hasDied() {
-        GameView.view.getTopScene().remove(MainScene.Layer.enemy, this);
-        if(this.gun != null) {
-            GameView.view.getTopScene().remove(MainScene.Layer.gun, this.gun);
-            this.gun = null;
-        }
-    }
-
+    // Enemy의 종류
     public enum EnemyType {
         Normal, Rush, Gunner;
 
@@ -42,17 +29,10 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         }
 
     }
+
     private EnemyType type;
 
-    private float ENEMY_WIDTH = 100f;
-    private float ENEMY_HEIGHT = ENEMY_WIDTH;
-    private float speed = 200f;
-    private Gauge gauge;
-
-    public float getExp() {
-        return exp;
-    }
-
+    // Enemy 상태(행동)
     public enum State {
         idle, move, attack, stun;
 
@@ -60,7 +40,64 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
     State state = State.idle;
+
+    // Status
+    private int level;
+    private Gun gun;
+    private float range;
+    private float stunTime;
+
+    private float DEFAULT_SPEED = 200f;
+    private float speed = DEFAULT_SPEED;
+
+    private Paint paint;
+    private final int[] rangeColor = {Color.CYAN, Color.YELLOW, Color.RED};
+
+    public void hasDied() {
+        GameView.view.getTopScene().remove(MainScene.Layer.enemy, this);
+        if (this.gun != null) {
+            GameView.view.getTopScene().remove(MainScene.Layer.gun, this.gun);
+            this.gun = null;
+        }
+    }
+
+    // Bitmap
+    private final float ENEMY_WIDTH = 100f;
+    private final float ENEMY_HEIGHT = ENEMY_WIDTH;
+    private Gauge gauge;
+
+    public float getExp() {
+        return exp;
+    }
+
     public void setState(State state) {
+        if (this.state == state) return;
+
+        switch (state) {
+            case idle:
+            case move:
+                break;
+            case attack:
+                switch (type) {
+                    case Normal:
+                    case Gunner:
+                        break;
+                    case Rush:
+                        speed = DEFAULT_SPEED * 2;
+                        break;
+                }
+                break;
+            case stun:
+                switch (type) {
+                    case Normal:
+                    case Gunner:
+                        break;
+                    case Rush:
+                        speed = DEFAULT_SPEED;
+                        break;
+                }
+                break;
+        }
         this.state = state;
     }
 
@@ -79,11 +116,11 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     private Enemy init(float x, float y, int level, EnemyType type) {
         setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
-        state = State.idle;
+        setState(State.idle);
         this.level = level;
         setType(type);
 
-        if(paint == null){
+        if (paint == null) {
             paint = new Paint();
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(1.5f);
@@ -99,29 +136,27 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     private void setType(EnemyType type) {
         this.type = type;
-        if (type == EnemyType.Normal){
+        if (type == EnemyType.Normal) {
             this.maxLife = this.life = 100 + level * 40;
             this.power = 10 + level * 20;
-            this.exp = (float)Math.pow(1.5f, level) * 100;
-            this.range = ENEMY_WIDTH * 1.5f;
-            this.speed = 200f;
-        }
-        else if (type == EnemyType.Rush){
+            this.exp = (float) Math.pow(1.5f, level) * 100;
+            this.range = ENEMY_WIDTH * 0.5f;
+            this.speed = DEFAULT_SPEED;
+        } else if (type == EnemyType.Rush) {
             this.maxLife = this.life = 100 + level * 40;
             this.power = 40 + level * 40;
-            this.exp = (float)Math.pow(3.0f, level) * 100;
+            this.exp = (float) Math.pow(3.0f, level) * 100;
             this.range = ENEMY_WIDTH * 6.0f;
-            this.speed = 200f;
-        }
-        else if (type == EnemyType.Gunner){
+            this.speed = DEFAULT_SPEED;
+        } else if (type == EnemyType.Gunner) {
             this.maxLife = this.life = 100 + level * 40;
             this.power = 10 + level * 20;
-            this.exp = (float)Math.pow(2.0f, level) * 100;
+            this.exp = (float) Math.pow(2.0f, level) * 100;
             this.gun = Gun.get(this, MainScene.Layer.player, 50, 5, 0);
             this.gun.setFIRE_INTERVAL(2.0f);
             Scene.top().add(this.gun);
-            this.range = ENEMY_WIDTH * 6.0f;
-            this.speed = 200f;
+            this.gun.setRange(this.range = ENEMY_WIDTH * 6.0f);
+            this.speed = DEFAULT_SPEED;
         }
     }
 
@@ -142,6 +177,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     public Enemy() {
         this(0, 0);
     }
+
     public Enemy(int mipmapId) {
         this(mipmapId, 0, 0);
     }
@@ -166,44 +202,69 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     public void update() {
         // 플레이어와의 상대적 위치 계산
         PointF vec = WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY());
-        updateByType(vec);
+        updateByState(vec);
 
         // Bitmap은 이동중일시 Move, 아닐시 Idle 로 출력.
-        if(dx == 0f && dy == 0f) {
+        if (dx == 0f && dy == 0f) {
             setImageResourceId(resource_resIds[this.type.ordinal()][0], 4);
-        }
-        else{
+        } else {
             setImageResourceId(resource_resIds[this.type.ordinal()][1], 4);
         }
     }
 
-    private void updateByType(PointF vec) {
+    private void updateByState(PointF vec) {
         // Type에 따른 State 변경 - State는 Bitmap 선택과 관련
-        if(vec.length() < range){
-            Attack(vec);
-        }
-        else{
-            state = State.move;
-            setState(State.move);
-            moveTo(vec);
-        }
-        super.update();
+        switch (state) {
+            case idle:
+            case move:
+                if (vec.length() < range) {
+                    Attack(vec);
+                } else {
+                    setState(State.move);
+                    moveTo(vec);
+                }
+                super.update();
 
-        // 목표 위치를 넘지 않도록 위치 수정.
-        float adjx = x;
-        PointF newVec = WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY());
-        if((vec.x < 0 && newVec.x > 0) || (vec.x > 0 && newVec.x < 0)){
-            adjx = target.getX();
-        }
-        if(adjx != x){
-            setPositionTo(adjx, y);
-        }
-        float adjy = y;
-        if((vec.y < 0 && newVec.y > 0) || (vec.y > 0 && newVec.y < 0)){
-            adjy = target.getY();
-        }
-        if(adjy != y){
-            setPositionTo(x, adjy);
+                // 목표 위치를 넘지 않도록 위치 수정.
+                float adjx = x;
+                PointF newVec = WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY());
+                if ((vec.x < 0 && newVec.x > 0) || (vec.x > 0 && newVec.x < 0)) {
+                    adjx = target.getX();
+                }
+                if (adjx != x) {
+                    setPositionTo(adjx, y);
+                }
+                float adjy = y;
+                if ((vec.y < 0 && newVec.y > 0) || (vec.y > 0 && newVec.y < 0)) {
+                    adjy = target.getY();
+                }
+                if (adjy != y) {
+                    setPositionTo(x, adjy);
+                }
+                break;
+            case attack:
+                switch (type) {
+                    case Normal:
+                    case Gunner:
+                        // 공격 사거리를 벗어날 경우 attack 상태를 벗어난다.
+                        if (vec.length() >= range) {
+                            setState(State.idle);
+                        }
+                        break;
+                    case Rush:
+                        super.update();
+                        if (WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY()).length() > Metrics.height) {
+                            setState(State.stun);
+                        }
+                        break;
+                }
+                break;
+            case stun:
+                stunTime -= GameView.frameTime;
+                if (stunTime < 0.0f) {
+                    setState(State.idle);
+                }
+                break;
         }
     }
 
@@ -220,21 +281,18 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
 
     private void Attack(PointF vec) {
-        if (type == EnemyType.Normal){
-            dx = 0f;
-            dy = 0f;
-            state = State.idle;
-        }
-        else if (type == EnemyType.Rush){
-            if(state == State.idle || state == State.move){
-                state = State.attack;
-                speed = 600;
-            }
-        }
-        else if (type == EnemyType.Gunner){
-            dx = 0f;
-            dy = 0f;
-            state = State.idle;
+        setState(State.attack);
+        switch (type) {
+            case Normal:
+            case Gunner:
+                dx = 0f;
+                dy = 0f;
+                if (gun != null) gun.resetCoolTime();
+                break;
+            case Rush:
+                setState(State.attack);
+                moveTo(vec);
+                break;
         }
     }
 
@@ -245,17 +303,18 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
         super.draw(canvas);
 
-        if(GameView.drawsDebugStuffs) {
+        if (GameView.drawsDebugStuffs) {
             // Range 출력
             canvas.drawCircle(px, py, range, paint);
         }
 
         // life 출력
         float barSize = width * 2 / 3;
-        if (gauge == null){
+        if (gauge == null) {
             gauge = new Gauge(0.2f, R.color.enemy_health_fg, R.color.enemy_health_bg);
         }
-        if(life < maxLife) gauge.draw(canvas, px - barSize / 2, py + barSize / 2 + 30, barSize, life / maxLife);
+        if (life < maxLife)
+            gauge.draw(canvas, px - barSize / 2, py + barSize / 2 + 30, barSize, life / maxLife);
 
 
         // Debug용 이동방향 출력
