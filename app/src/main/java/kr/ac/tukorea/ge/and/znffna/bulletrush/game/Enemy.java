@@ -12,6 +12,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
+import kr.ac.tukorea.ge.and.znffna.bulletrush.util.WarpUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
 public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
@@ -53,7 +54,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
     public enum State {
-        idle, move, rush, stun;
+        idle, move, attack, stun;
 
         public static final int COUNT = values().length;
     }
@@ -61,14 +62,13 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     State state = State.idle;
     public void setState(State state) {
         this.state = state;
-        setImageResourceId(resource_resIds[this.type.ordinal() * State.COUNT + state.ordinal()], 4);
     }
 
 
-    private static final int[] resource_resIds = {
-            R.mipmap.enemy_idle0, R.mipmap.enemy_move0, R.mipmap.enemy_idle0, R.mipmap.enemy_idle0,
-            R.mipmap.enemy_idle1, R.mipmap.enemy_move1, R.mipmap.enemy_idle1, R.mipmap.enemy_idle1,
-            R.mipmap.enemy_idle2, R.mipmap.enemy_move2, R.mipmap.enemy_idle2, R.mipmap.enemy_idle2
+    private static final int[][] resource_resIds = {
+            {R.mipmap.enemy_idle0, R.mipmap.enemy_move0},
+            {R.mipmap.enemy_idle1, R.mipmap.enemy_move1},
+            {R.mipmap.enemy_idle2, R.mipmap.enemy_move2}
     };
 
     private static MapObject target;
@@ -147,7 +147,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
     public Enemy(float x, float y) {
-        this(resource_resIds[0], x, y);
+        this(resource_resIds[0][0], x, y);
     }
 
     public Enemy(int mipmapId, float x, float y) {
@@ -165,8 +165,16 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     @Override
     public void update() {
         // 플레이어와의 상대적 위치 계산
-        PointF vec = getWrappedDelta(x, y, target.getX(), target.getY());
+        PointF vec = WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY());
         updateByType(vec);
+
+        // Bitmap은 이동중일시 Move, 아닐시 Idle 로 출력.
+        if(dx == 0f && dy == 0f) {
+            setImageResourceId(resource_resIds[this.type.ordinal()][0], 4);
+        }
+        else{
+            setImageResourceId(resource_resIds[this.type.ordinal()][1], 4);
+        }
     }
 
     private void updateByType(PointF vec) {
@@ -183,7 +191,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
         // 목표 위치를 넘지 않도록 위치 수정.
         float adjx = x;
-        PointF newVec = getWrappedDelta(x, y, target.getX(), target.getY());
+        PointF newVec = WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY());
         if((vec.x < 0 && newVec.x > 0) || (vec.x > 0 && newVec.x < 0)){
             adjx = target.getX();
         }
@@ -219,7 +227,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         }
         else if (type == EnemyType.Rush){
             if(state == State.idle || state == State.move){
-                state = State.rush;
+                state = State.attack;
                 speed = 600;
             }
         }

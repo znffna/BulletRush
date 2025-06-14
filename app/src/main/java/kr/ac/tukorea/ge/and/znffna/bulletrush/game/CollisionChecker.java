@@ -36,6 +36,7 @@ public class CollisionChecker implements IGameObject {
                     boolean dead = player.decreaseLife(enemy.getPower());
                     if (dead) {
                         // TODO :: 게임 결과 화면 띄우기
+                        Log.d(TAG, "Player Died");
                         GameView.view.popScene();
                     }
                     break;
@@ -59,6 +60,7 @@ public class CollisionChecker implements IGameObject {
                     boolean dead = player.decreaseLife(bullet.getPower());
                     if (dead) {
                         // TODO :: 게임 결과 화면 띄우기
+                        Log.d(TAG, "Player Died");
                         GameView.view.popScene();
                     }
                     break;

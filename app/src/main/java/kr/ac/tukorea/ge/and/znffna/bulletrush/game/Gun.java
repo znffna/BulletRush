@@ -2,11 +2,15 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.RectF;
 
 import java.util.ArrayList;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
+import kr.ac.tukorea.ge.and.znffna.bulletrush.util.WarpUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
@@ -33,6 +37,9 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private MapObject Follow;
     private float GUN_OFFSET_Y = 0f;
     private float GUN_OFFSET_X = 0f;
+    private static Paint paint;
+    private float range = 500f;
+
     public void setFIRE_INTERVAL(float FIRE_INTERVAL) {
         this.FIRE_INTERVAL = FIRE_INTERVAL;
     }
@@ -65,6 +72,13 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     Gun init(MapObject object, MainScene.Layer targetLayer, float x, float y, int type) {
         setImageResourceId(resIds[type * 2]);
+
+        if(paint == null) {
+            paint = new Paint();
+            paint.setColor(Color.RED);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(3f);
+        }
 
         if(sparkBitmap == null) sparkBitmap = BitmapPool.get(R.mipmap.gun_spark);
         if(sparkRect == null) sparkRect = new RectF();
@@ -135,7 +149,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         Scene scene = Scene.top();
         if(scene == null) return false;
 
-        maxLength = Float.MAX_VALUE;
+        maxLength = range * range;
         MapObject bfNear = nearest;
         nearest = null;
         ArrayList<IGameObject> targets = Scene.top().objectsAt(targetLayer);
@@ -180,15 +194,16 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         canvas.rotate(angle, x, y);
         canvas.drawBitmap(bitmap, srcRect, dstRect, null);
 
+        // 사격 사거리 출력
+        canvas.drawCircle(x, y, range, paint);
+
+        // 격발 이미지 출력
         if (FIRE_INTERVAL - fireCoolTime < SPARK_DURATION) {
             canvas.rotate(90f, x, y);
             RectUtil.setRect(sparkRect, x, y - SPARK_OFFSET , SPARK_WIDTH, SPARK_HEIGHT);
             canvas.drawBitmap(sparkBitmap, null, sparkRect, null);
         }
-
         canvas.restore();
-
-
     }
 
     public void setPower(float attackPower) {
