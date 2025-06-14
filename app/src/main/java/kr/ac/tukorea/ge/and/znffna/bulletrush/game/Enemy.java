@@ -242,6 +242,10 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             gauge = new Gauge(0.2f, R.color.enemy_health_fg, R.color.enemy_health_bg);
         }
         if(life < maxLife) gauge.draw(canvas, px - barSize / 2, py + barSize / 2 + 30, barSize, life / maxLife);
+
+
+        // Debug용 이동방향 출력
+        canvas.drawLine(px, py, px + dx, py + dy, paint);
     }
 
     @Override
