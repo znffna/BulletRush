@@ -52,6 +52,7 @@ public class CollisionChecker implements IGameObject {
             ArrayList<IGameObject> bullets = scene.objectsAt(MainScene.Layer.bullet);
             for (int b = bullets.size() - 1; b >= 0; b--) {
                 Bullet bullet = (Bullet)bullets.get(b);
+                if(bullet.isHit) continue;
                 MainScene.Layer layer = bullet.getTargetLayer();
                 if(player.getLayer() != layer) continue;
                 if (CollisionHelper.collides(player, bullet)) {
@@ -76,6 +77,7 @@ public class CollisionChecker implements IGameObject {
             ArrayList<IGameObject> bullets = scene.objectsAt(MainScene.Layer.bullet);
             for (int b = bullets.size() - 1; b >= 0; b--) {
                 Bullet bullet = (Bullet)bullets.get(b);
+                if(bullet.isHit) continue;
                 MainScene.Layer layer = bullet.getTargetLayer();
                 if(enemy.getLayer() != layer) continue;
                 if (CollisionHelper.collides(enemy, bullet)) {
