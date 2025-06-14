@@ -38,6 +38,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private float GUN_OFFSET_Y = 0f;
     private float GUN_OFFSET_X = 0f;
     private static Paint paint;
+    private float speed = Bullet.SPEED;
 
     public void setRange(float range) {
         this.range = range;
@@ -189,7 +190,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         if (scene == null) return;
 
         this.angle = (float) Math.toDegrees(angle);
-        Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(angle), y + GUN_HEIGHT / 2 * (float)Math.sin(angle), angle, power, targetLayer);
+        Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(angle), y + GUN_HEIGHT / 2 * (float)Math.sin(angle), angle, power, targetLayer, speed);
         scene.add(bullet);
     }
 
@@ -219,5 +220,9 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     public void resetCoolTime() {
         fireCoolTime = FIRE_INTERVAL;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 }

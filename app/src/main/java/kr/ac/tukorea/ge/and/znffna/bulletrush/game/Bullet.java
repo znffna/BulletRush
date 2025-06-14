@@ -12,7 +12,13 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
 public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
-    private static final float SPEED = 400f;
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public static float SPEED = 1000f;
+    private float speed = SPEED;
+
     private static final float BULLET_WIDTH = 30f;
     private static final float BULLET_HEIGHT = BULLET_WIDTH;
     private static final String TAG = CollisionChecker.class.getSimpleName();
@@ -20,17 +26,18 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
     private float power;
     private float maxRange = 3.0f;
     private MainScene.Layer targetLayer;
-    private boolean isHit = false;
+    public boolean isHit = false;
     private float outputPowerTime = DEFAULT_POWER_OUTPUT;
 
-    public static Bullet get(float x, float y, float angle, float power, MainScene.Layer target) {
-        return Scene.top().getRecyclable(Bullet.class).init(x, y, angle, power, target);
+    public static Bullet get(float x, float y, float angle, float power, MainScene.Layer target, float speed) {
+        return Scene.top().getRecyclable(Bullet.class).init(x, y, angle, power, target, speed);
     }
 
-    private Bullet init(float x, float y, float angle, float power, MainScene.Layer target) {
+    private Bullet init(float x, float y, float angle, float power, MainScene.Layer target, float speed) {
         setPosition(x, y, BULLET_WIDTH, BULLET_HEIGHT);
-        this.dx = (float) (SPEED * Math.cos(angle));
-        this.dy = (float) (SPEED * Math.sin(angle));
+        this.speed = speed;
+        this.dx = (float) (this.speed * Math.cos(angle));
+        this.dy = (float) (this.speed * Math.sin(angle));
         this.power = power;
         this.maxRange = 1000.0f;
         this.targetLayer = target;
@@ -50,7 +57,7 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
             }
         };
 
-        maxRange -= SPEED * GameView.frameTime;
+        maxRange -= speed * GameView.frameTime;
         if (maxRange < 0.0f){
             Scene.top().remove(this);
         }
