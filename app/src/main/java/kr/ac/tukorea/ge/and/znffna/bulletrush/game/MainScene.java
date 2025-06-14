@@ -27,7 +27,7 @@ public class MainScene extends Scene {
     }
 
     public MainScene() {
-        Metrics.setGameSize(900, 1500);
+        Metrics.setGameSize(900, 1600);
         initLayers(Layer.COUNT);
 
         joyStick = new JoyStick(R.mipmap.joystick_bg, R.mipmap.joystick_thumb, Metrics.width - 200, Metrics.height - 200, 100, 30, 80);

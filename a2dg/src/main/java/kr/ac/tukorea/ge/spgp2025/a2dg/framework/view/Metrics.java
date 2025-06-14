@@ -21,8 +21,8 @@ public class Metrics {
     public static void setGameSize(float width, float height) {
         Metrics.width = width;
         Metrics.height = height;
-        Metrics.worldWidth = width * 3;
-        Metrics.worldHeight = height * 3;
+        Metrics.worldWidth = width * 2;
+        Metrics.worldHeight = height * 2;
         borderRect.right = width;
         borderRect.bottom = height;
     }
