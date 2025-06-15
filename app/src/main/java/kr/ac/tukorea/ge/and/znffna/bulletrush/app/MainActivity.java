@@ -34,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onBtnStartGame(View view) {
-        startActivity(new Intent(this, BulletRushActivity.class));
+        Intent intent = new Intent(this, BulletRushActivity.class);
+        intent.putExtra(BulletRushActivity.KEY_WEAPON_ID, cookieIndex);
+        startActivity(intent);
     }
 
     private void setWeaponIndex(int index){

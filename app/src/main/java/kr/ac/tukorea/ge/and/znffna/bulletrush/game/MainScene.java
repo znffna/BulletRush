@@ -26,7 +26,7 @@ public class MainScene extends Scene {
         public static final int COUNT = values().length;
     }
 
-    public MainScene() {
+    public MainScene(int weaponId) {
         Metrics.setGameSize(900, 1600);
         initLayers(Layer.COUNT);
 
@@ -34,7 +34,7 @@ public class MainScene extends Scene {
         player = new Player(joyStick);
         Enemy.setTarget(player);
 
-        Gun gun = new Gun(player, Layer.enemy,  50, 5, 0);
+        Gun gun = new Gun(player, Layer.enemy,  50, 5, weaponId);
         player.addGun(gun);
         add(Layer.gun, gun);
 
