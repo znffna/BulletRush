@@ -85,7 +85,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
                     case Gunner:
                         break;
                     case Rush:
-                        speed = DEFAULT_SPEED * 8;
+                        speed = DEFAULT_SPEED * 2;
                         break;
                 }
                 break;
@@ -175,6 +175,8 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private float exp;
 
     public boolean decreaseLife(float power) {
+        Scene.top().add(new HitPopup("" + (int)power, px, py, 40, 0f, -50f, 0.3f));
+
         life -= power;
         return life <= 0;
     }

@@ -3,6 +3,7 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
@@ -62,6 +64,8 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         if(hitTime < 0.0f) {
             hitTime = INVINCIBILITY_TIME;
             life -= power;
+            Scene.top().add(new HitPopup("" + (int)power, Metrics.width / 2, Metrics.height / 2, 40, 0f, -50f, 0.3f));
+            Log.v(TAG, "Player decreaseLife " + life + " to " + (life - power) + "(-" + power + ")");
         }
         return life <= 0;
     }
@@ -90,6 +94,9 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         this.joyStick = joyStick;
         this.state = State.idle;
         setPosition(Metrics.width / 2, Metrics.height / 2, PLAYER_WIDTH, PLAYER_HEIGHT);
+
+        px = Metrics.width / 2;
+        py = Metrics.height / 2;
 
         maxLife = life = 100f;
         attackPower = 50f;

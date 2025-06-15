@@ -85,16 +85,16 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
         return targetLayer;
     }
 
-    public void onHit(MapObject object) {
+    public boolean onHit(MapObject object) {
         // 이미 부딫힌 오브젝트인지 확인
-        if(hitObject.contains(object)) return;
+        if(hitObject.contains(object)) return false;
         
         // 새로 부딫힌 오브젝트에 대한 충돌로직 처리
         hitObject.add(object);
-        Scene.top().add(new HitPopup("" + (int)this.power, px, py, 40, 0f, -50f, 0.3f));
         penetrableTimes -= 1;
         if(penetrableTimes < 0){
             Scene.top().remove(this);
         }
+        return true;
     }
 }
