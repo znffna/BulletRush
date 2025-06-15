@@ -12,6 +12,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.Sound;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
@@ -62,6 +63,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
 
     public boolean decreaseLife(float power) {
         if(hitTime < 0.0f) {
+            Sound.playEffect(R.raw.hit);
             hitTime = INVINCIBILITY_TIME;
             life -= power;
             Scene.top().add(new HitPopup("" + (int)power, Metrics.width / 2, Metrics.height / 2, 40, 0f, -50f, 0.3f));

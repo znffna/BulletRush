@@ -12,6 +12,7 @@ import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IRecyclable;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.Sound;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.Gauge;
 import kr.ac.tukorea.ge.and.znffna.bulletrush.util.WarpUtil;
@@ -19,6 +20,8 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
+
+    private float attackTime;
 
     // Enemy의 종류
     public enum EnemyType {
@@ -175,6 +178,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private float exp;
 
     public boolean decreaseLife(float power) {
+        Sound.playEffect(R.raw.hit);
         Scene.top().add(new HitPopup("" + (int)power, px, py, 40, 0f, -50f, 0.3f));
 
         life -= power;
@@ -256,9 +260,16 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
                         }
                         break;
                     case Rush:
+                        attackTime += GameView.frameTime;
                         super.update();
                         newVec = WarpUtil.getWrappedDelta(x, y, target.getX(), target.getY());
+                        
+                        // 화면 밖에 나갔을 경우
                         if (abs(newVec.x) > Metrics.width / 2 || abs(newVec.y) > Metrics.height / 2 ) {
+                            setState(State.stun, 2.0f);
+                        }
+                        // 또는, 일정 시간 돌진했을 경우
+                        if (attackTime > 3.0f){
                             setState(State.stun, 2.0f);
                         }
                         break;
@@ -266,6 +277,9 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
                 break;
             case stun:
                 stunTime -= GameView.frameTime;
+                dx = 0f;
+                dy = 0f;
+                super.update();
                 if (stunTime < 0.0f) {
                     setState(State.idle, 2.0f);
                 }
@@ -297,6 +311,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             case Rush:
                 setState(State.attack, 2.0f);
                 moveTo(vec);
+                attackTime = 0.0f;
                 break;
         }
     }
