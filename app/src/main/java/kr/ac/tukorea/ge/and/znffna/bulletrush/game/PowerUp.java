@@ -12,7 +12,7 @@ public class PowerUp extends MapObject implements IRecyclable, IBoxCollidable, I
     private static final int[] resIds = {
             R.mipmap.power_hp, R.mipmap.power_atk, R.mipmap.power_as, R.mipmap.power_speed
     };
-    private static final float POWERUP_WIDTH = 50f;
+    private static final float POWERUP_WIDTH = 100f;
     private static final float POWERUP_HEIGHT = POWERUP_WIDTH;
 
     public float getValue() {

@@ -67,8 +67,9 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
     // Bitmap
-    private final float ENEMY_WIDTH = 100f;
-    private final float ENEMY_HEIGHT = ENEMY_WIDTH;
+    private final float ENEMY_DEFUALT_SIZE = 100f;
+    private float enemyWidth = ENEMY_DEFUALT_SIZE;
+    private float enemyHeight = enemyWidth;
     private Gauge gauge;
 
     public float getExp() {
@@ -121,10 +122,10 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     }
 
     private Enemy init(float x, float y, int level, EnemyType type) {
-        setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
+        setLevel(level);
         setType(type);
         setState(State.idle, 2.0f);
-        this.level = level;
+        setPosition(x, y, enemyWidth, enemyHeight);
 
         if (paint == null) {
             paint = new Paint();
@@ -140,19 +141,25 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
         return this;
     }
 
+    private void setLevel(int level) {
+        this.level = level;
+        this.enemyWidth = ENEMY_DEFUALT_SIZE * (1f + 0.1f * level);
+        this.enemyHeight = ENEMY_DEFUALT_SIZE * (1f + 0.1f * level);
+    }
+
     private void setType(EnemyType type) {
         this.type = type;
         if (type == EnemyType.Normal) {
             this.maxLife = this.life = 100 + level * 40;
             this.power = 10 + level * 20;
             this.exp = (float) Math.pow(1.5f, level) * 100;
-            this.range = ENEMY_WIDTH * 0.5f;
+            this.range = enemyWidth * 0.5f;
             this.speed = DEFAULT_SPEED;
         } else if (type == EnemyType.Rush) {
             this.maxLife = this.life = 100 + level * 40;
             this.power = 40 + level * 40;
             this.exp = (float) Math.pow(3.0f, level) * 100;
-            this.range = ENEMY_WIDTH * 6.0f;
+            this.range = enemyWidth * 6.0f;
             this.speed = DEFAULT_SPEED;
         } else if (type == EnemyType.Gunner) {
             this.maxLife = this.life = 100 + level * 40;
@@ -163,7 +170,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             this.gun.setSpeed(200.0f);
             this.gun.setPower(this.power);
             Scene.top().add(this.gun);
-            this.gun.setRange(this.range = ENEMY_WIDTH * 4.0f);
+            this.gun.setRange(this.range = enemyWidth * 4.0f);
             this.speed = DEFAULT_SPEED;
         }
     }
