@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
-import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.Button;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.Sound;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
@@ -24,7 +24,7 @@ public class MainScene extends Scene {
     }
 
     public enum Layer {
-        none, bg, enemy, bullet, player, gun, ui, controller;
+        none, bg, enemy, bullet, player, gun, ui, touch, controller;
         public static final int COUNT = values().length;
     }
 
@@ -45,6 +45,14 @@ public class MainScene extends Scene {
 
         ScrollBackground bg = new ScrollBackground(R.mipmap.background, player);
         add(Layer.bg, bg);
+
+        add(Layer.touch, new Button(R.mipmap.btn_pause, Metrics.width - 100, 100f, 100f, 100f, new Button.OnTouchListener() {
+            @Override
+            public boolean onTouch(boolean pressed) {
+                new PauseScene().push();
+                return false;
+            }
+        }));
 
         add(Layer.controller, new CollisionChecker(this));
         add(Layer.controller, new EnemyGenerator(this));
@@ -69,8 +77,14 @@ public class MainScene extends Scene {
     }
 
     @Override
+    protected int getTouchLayerIndex() {
+        return Layer.touch.ordinal();
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return joyStick.onTouch(event);
+        boolean ret = super.onTouchEvent(event);
+        return ret || joyStick.onTouchEvent(event);
     }
 
     @Override

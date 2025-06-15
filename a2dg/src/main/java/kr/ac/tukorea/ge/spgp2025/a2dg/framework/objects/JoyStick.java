@@ -3,15 +3,15 @@ package kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.MotionEvent;
 
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ITouchable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.RectUtil;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 
-public class JoyStick implements IGameObject {
+public class JoyStick implements IGameObject, ITouchable {
     private static final String TAG = JoyStick.class.getSimpleName();
     private final Bitmap bgBitmap;
     private final Bitmap thumbBitmap;
@@ -48,7 +48,7 @@ public class JoyStick implements IGameObject {
         canvas.drawBitmap(thumbBitmap, null, thumbRect, null);
     }
 
-    public boolean onTouch(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
         float[] pts;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
