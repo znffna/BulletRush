@@ -90,7 +90,6 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     }
 
     Gun init(MapObject object, MainScene.Layer targetLayer, float x, float y, int type) {
-        setImageResourceId(resIds[type]);
 
         if(paint == null) {
             paint = new Paint();
@@ -129,17 +128,16 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     public void setType(int type) {
         this.type = getType(type);
+        setImageResourceId(resIds[type]);
+
         switch (this.type) {
             case AR:
-                power = 5;
                 this.penetrableTimes = 0;
                 break;
             case SG:
-                power = 10;
                 this.penetrableTimes = 0;
                 break;
             case SR:
-                power = 20;
                 this.penetrableTimes = 2;
                 break;
         }

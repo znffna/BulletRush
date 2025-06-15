@@ -49,7 +49,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
     private float range;
     private float stunTime;
 
-    private float DEFAULT_SPEED = 50f;
+    private final float DEFAULT_SPEED = 150f;
     private float speed = DEFAULT_SPEED;
 
     private Paint paint;
