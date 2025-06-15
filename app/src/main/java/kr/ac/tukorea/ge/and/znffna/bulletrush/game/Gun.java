@@ -252,7 +252,15 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     }
 
     public void setPower(float attackPower) {
-        this.power = attackPower;
+        switch (type){
+            case AR:
+            case SR:
+                this.power = attackPower;
+                break;
+            case SG:
+                this.power = attackPower * 0.5f;
+                break;
+        }
     }
 
     public void resetCoolTime() {
