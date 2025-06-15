@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@mipmap/title_bg"
     android:id="@+id/main"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/cookie_run_bg_1"
     android:gravity="center"
     tools:context=".app.MainActivity">
 
-
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:src="@mipmap/title" />
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintWidth_percent="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical"
+        android:background="@drawable/title_round_bg"
         android:padding="20dp"
         android:gravity="center"
         >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@mipmap/title"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="100dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,14 +69,16 @@
                 android:text="&gt;" />
 
         </LinearLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_game"
+            android:textSize="30sp"
+            android:onClick="onBtnStartGame"
+            />
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/start_game"
-        android:textSize="30sp"
-        android:onClick="onBtnStartGame"
-        />
 
-</LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
