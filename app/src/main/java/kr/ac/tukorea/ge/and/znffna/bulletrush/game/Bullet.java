@@ -13,7 +13,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
 public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
     private int penetrableTimes; // 관통 가능 횟수
-    private HashSet<MapObject> hitObject;
+    private HashSet<MapObject> hitObject = new HashSet<>();
 
     public void setSpeed(float speed) {
         this.speed = speed;
@@ -43,6 +43,7 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
         this.maxRange = 1000.0f;
         this.targetLayer = target;
         this.penetrableTimes = 0;
+        hitObject.clear();
         return this;
     }
 

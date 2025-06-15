@@ -4,7 +4,9 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.JoyStick;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.Sound;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
@@ -49,6 +51,7 @@ public class MainScene extends Scene {
 //        add(Layer.enemy, new Enemy(0, 100, 100));
     }
 
+
     // Game Loop Functions
     @Override
     public void update() {
@@ -68,5 +71,23 @@ public class MainScene extends Scene {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return joyStick.onTouch(event);
+    }
+
+    @Override
+    public void onEnter() {
+        Sound.playMusic(R.raw.game_music);
+    }
+    @Override
+    public void onPause() {
+        Sound.pauseMusic();
+    }
+
+    @Override
+    public void onResume() {
+        Sound.resumeMusic();
+    }
+    @Override
+    public void onExit() {
+        Sound.stopMusic();
     }
 }

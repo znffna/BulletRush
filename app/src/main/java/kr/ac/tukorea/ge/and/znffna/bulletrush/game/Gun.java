@@ -28,6 +28,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private static final String TAG = Gun.class.getSimpleName();
     private final float GUN_WIDTH = 112f;
     private final float GUN_HEIGHT = 40f;
+    private int penetrableTimes; // 관통 가능 횟수
 
     public enum GunType {
         AR, SG, SR;
@@ -128,10 +129,19 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
     public void setType(int type) {
         this.type = getType(type);
-        if (type == 0) {
-            power = 5;
-        } else {
-            power = 5;
+        switch (this.type) {
+            case AR:
+                power = 5;
+                this.penetrableTimes = 0;
+                break;
+            case SG:
+                power = 10;
+                this.penetrableTimes = 0;
+                break;
+            case SR:
+                power = 20;
+                this.penetrableTimes = 2;
+                break;
         }
     }
 
