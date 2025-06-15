@@ -1,5 +1,7 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
+import static kr.ac.tukorea.ge.and.znffna.bulletrush.game.Gun.GunType.getType;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,8 +29,17 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private final float GUN_WIDTH = 112f;
     private final float GUN_HEIGHT = 40f;
 
+    public enum GunType {
+        AR, SG, SR;
 
-    private int type;
+        public static final int COUNT = values().length;
+
+        public static GunType getType(int index) {
+            return values()[index % COUNT];
+        }
+    }
+
+    private GunType type;
     private float power = 5f;
 
     public static final int[] resIds = {
@@ -116,7 +127,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     public void onRecycle() {}
 
     public void setType(int type) {
-        this.type = type;
+        this.type = getType(type);
         if (type == 0) {
             power = 5;
         } else {
@@ -193,8 +204,23 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         MainScene scene = (MainScene) Scene.top();
         if (scene == null) return;
 
-        Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(radianAngle), y + GUN_HEIGHT / 2 * (float)Math.sin(radianAngle), radianAngle, power, targetLayer, speed);
-        scene.add(bullet);
+        float angle = this.angle - 10f;
+        switch (type){
+            case AR:
+            case SR:
+                Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(radianAngle), y + GUN_HEIGHT / 2 * (float)Math.sin(radianAngle), radianAngle, power, targetLayer, speed);
+                scene.add(bullet);
+                break;
+            case SG:
+                for(int i = 0; i < 3; ++i){
+                    bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(radianAngle), y + GUN_HEIGHT / 2 * (float)Math.sin(radianAngle), (float) Math.toRadians(angle), power, targetLayer, speed);
+                    scene.add(bullet);
+                    angle += 10f;
+                }
+                break;
+
+        }
+
     }
 
     @Override

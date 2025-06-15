@@ -79,7 +79,7 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
     }
 
     public void onHit() {
-        Scene.top().add(new HitPopup("" + (int)this.power, px, py, 40, 0f, -50f));
+        Scene.top().add(new HitPopup("" + (int)this.power, px, py, 40, 0f, -50f, 0.3f));
         Scene.top().remove(this);
     }
 }
