@@ -49,6 +49,8 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         this.exp -= this.maxExp;
         if( this.exp < 0.0f) this.exp = 0f;
         this.maxExp *= 2;
+
+        
     }
 
     private void setLevel(int level) {
@@ -187,7 +189,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private void drawStatus(Canvas canvas) {
         TextHelper.drawFontString(canvas, "LEVEL:" + this.level, 0, 0, 32);
 //        TextHelper.drawFontString(canvas, "EXP:" + (int)(this.exp), 0, 0, 32);
-        TextHelper.drawFontString(canvas, "HP:" + (int)(this.life / this.maxLife * 100)+"%", 0, 40, 32);
+        TextHelper.drawFontString(canvas, "HP:" + (int)this.life, 0, 40, 32);
         TextHelper.drawFontString(canvas, "ATK:" + (int)this.attackPower, 0, 80, 32);
     }
 

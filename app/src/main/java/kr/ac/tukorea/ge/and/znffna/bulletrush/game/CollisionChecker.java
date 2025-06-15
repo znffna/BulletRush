@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.util.CollisionHelper;
@@ -12,6 +13,7 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 public class CollisionChecker implements IGameObject {
     private static final String TAG = CollisionChecker.class.getSimpleName();
     private final MainScene scene;
+    private Random random = new Random();
 
     public CollisionChecker(MainScene mainScene) {
         this.scene = mainScene;
@@ -106,7 +108,11 @@ public class CollisionChecker implements IGameObject {
                     boolean dead = enemy.decreaseLife(bullet.getPower());
                     if (dead) {
                         enemy.hasDied();
-                        scene.add(PowerUp.get(enemy.getX(), enemy.getY(), (int)(enemy.px + enemy.py) % PowerUp.PowerType.COUNT));
+                        float r = random.nextFloat();
+                        // 15% 확률로 아이템 드랍.
+                        if(r < 0.15f){
+                            scene.add(PowerUp.get(enemy.getX(), enemy.getY(), random.nextInt(PowerUp.PowerType.COUNT)));
+                        }
                         scene.addExp(enemy.getExp());
 //                        scene.addScore(enemy.getScore());
                         // removed = true;
