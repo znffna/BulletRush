@@ -27,6 +27,7 @@ public class Metrics {
         borderRect.bottom = height;
     }
     public static void onSize(int w, int h) {
+
         float view_ratio = (float)w / (float)h;
         float game_ratio = Metrics.width / Metrics.height;
 
