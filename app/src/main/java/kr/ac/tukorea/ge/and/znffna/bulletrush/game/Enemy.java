@@ -345,7 +345,10 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
 
         // Debug용 이동방향 출력
-        canvas.drawLine(px, py, px + dx, py + dy, paint);
+        if (GameView.drawsDebugStuffs) {
+            // Range 출력
+            canvas.drawLine(px, py, px + dx, py + dy, paint);
+        }
     }
 
     @Override
