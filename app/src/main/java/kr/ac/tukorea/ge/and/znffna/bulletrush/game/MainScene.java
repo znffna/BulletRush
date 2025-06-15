@@ -49,7 +49,10 @@ public class MainScene extends Scene {
         add(Layer.touch, new Button(R.mipmap.btn_pause, Metrics.width - 100, 100f, 100f, 100f, new Button.OnTouchListener() {
             @Override
             public boolean onTouch(boolean pressed) {
-                new PauseScene().push();
+                if(pressed) {
+                    new PauseScene().push();
+                    return true;
+                }
                 return false;
             }
         }));
@@ -76,6 +79,13 @@ public class MainScene extends Scene {
         TextHelper.drawFontString(canvas, String.format("%02d:%02d", (int)playTime / 60, (int)playTime % 60), (int) (Metrics.width / 2) - (int)(fontSize * 2.5), 0, fontSize);
     }
 
+
+    @Override
+    public boolean onBackPressed() {
+        new PauseScene().push();
+        return true;
+    }
+
     @Override
     protected int getTouchLayerIndex() {
         return Layer.touch.ordinal();
@@ -83,8 +93,9 @@ public class MainScene extends Scene {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        boolean ret = super.onTouchEvent(event);
-        return ret || joyStick.onTouchEvent(event);
+        super.onTouchEvent(event);
+        joyStick.onTouchEvent(event);
+        return true;
     }
 
     @Override

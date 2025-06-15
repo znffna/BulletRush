@@ -23,17 +23,18 @@ public class PauseScene extends Scene {
         float w = Metrics.width, h = Metrics.height;
         add(Layer.bg, new Sprite(R.mipmap.trans_50b, w/2, h/2, w, h));
 
-        add(Layer.touch, new Button(R.mipmap.resume, 850f, 100f, 200f, 75f, new Button.OnTouchListener() {
+        add(Layer.touch, new Button(R.mipmap.resume, 500f, 550f, 200f, 75f, new Button.OnTouchListener() {
             @Override
             public boolean onTouch(boolean pressed) {
-                pop();
+                if(pressed) pop();
                 return false;
             }
         }));
 
-        add(Layer.touch, new Button(R.mipmap.exit, Metrics.width - 200f, 550f, 200f, 100f, new Button.OnTouchListener() {
+        add(Layer.touch, new Button(R.mipmap.exit, 200f, 550f, 200f, 75f, new Button.OnTouchListener() {
             @Override
             public boolean onTouch(boolean pressed) {
+                if(!pressed) return false;
                 new AlertDialog.Builder(GameView.view.getContext())
                         .setTitle("Confirm")
                         .setMessage("Do you really want to exit the game?")
@@ -51,12 +52,18 @@ public class PauseScene extends Scene {
         }));
     }
 
+    // Overridables
+    @Override
+    public boolean onBackPressed() {
+        pop();
+        return true;
+    }
+
     @Override
     protected int getTouchLayerIndex() {
         return Layer.touch.ordinal();
     }
 
-    // Overridables
     @Override
     public boolean isTransparent() {
         return true;
