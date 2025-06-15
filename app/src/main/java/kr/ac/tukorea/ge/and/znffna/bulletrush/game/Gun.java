@@ -31,7 +31,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private int type;
     private float power = 5f;
 
-    private static final int[] resIds = {
+    public static final int[] resIds = {
         R.mipmap.ar_1, R.mipmap.sg_1, R.mipmap.sr_1
     };
     private MapObject Follow;

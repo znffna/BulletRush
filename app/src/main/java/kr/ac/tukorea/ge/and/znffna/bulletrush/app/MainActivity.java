@@ -1,6 +1,10 @@
 package kr.ac.tukorea.ge.and.znffna.bulletrush.app;
 
+import static kr.ac.tukorea.ge.and.znffna.bulletrush.game.MainScene.Layer.ui;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -8,24 +12,52 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
+import kr.ac.tukorea.ge.and.znffna.bulletrush.databinding.ActivityMainBinding;
+import kr.ac.tukorea.ge.and.znffna.bulletrush.game.Gun;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.res.BitmapPool;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding ui;
+    private int cookieIndex;
+    private BitmapFactory.Options opts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        ui = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(ui.getRoot());
+
+        setWeaponIndex(0);
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            startActivity(new Intent(this, BulletRushActivity.class));
-//        }
-//        return super.onTouchEvent(event);
-//    }
+
 
     public void onBtnStartGame(View view) {
         startActivity(new Intent(this, BulletRushActivity.class));
+    }
+
+    private void setWeaponIndex(int index){
+        this.cookieIndex = index;
+
+        int weaponResID = Gun.resIds[index];
+        if (opts == null) {
+            opts = new BitmapFactory.Options();
+            opts.inScaled = false;
+        }
+
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), weaponResID, opts);
+        ui.weaponImageView.setImageBitmap(bmp);
+
+        ui.prevWeaponButton.setEnabled(index > 0);
+        ui.nextWeaponButton.setEnabled(index < Gun.resIds.length - 1);
+    }
+
+    public void onBtnPreviousWeapon(View view) {
+        setWeaponIndex(cookieIndex - 1);
+    }
+
+    public void onBtnNextWeapon(View view) {
+        setWeaponIndex(cookieIndex + 1);
     }
 }
