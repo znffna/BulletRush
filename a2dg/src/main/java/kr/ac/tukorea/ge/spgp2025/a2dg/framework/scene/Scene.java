@@ -21,6 +21,8 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 public class Scene {
     private static final String TAG = Scene.class.getSimpleName();
     protected ArrayList<ArrayList<IGameObject>> layers = new ArrayList<>();
+    private Paint bgpaint;
+
     //////////////////////////////////////////////////
     // Game Object Management
 
@@ -137,6 +139,12 @@ public class Scene {
         }
     }
     public void draw(Canvas canvas) {
+        if(bgpaint == null){
+            bgpaint = new Paint();
+            bgpaint.setStyle(Paint.Style.FILL);
+            bgpaint.setColor(Color.BLACK);
+        }
+        canvas.drawRect(Metrics.screenRect, bgpaint);
         if (this.clipsRect()) {
             canvas.clipRect(0, 0, Metrics.width, Metrics.height);
         }
