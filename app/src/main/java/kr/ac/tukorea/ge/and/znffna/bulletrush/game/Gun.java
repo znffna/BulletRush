@@ -32,7 +32,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     private float power = 5f;
 
     private static final int[] resIds = {
-        R.mipmap.assault_rifle, R.mipmap.assault_rifle_left
+        R.mipmap.ar_1, R.mipmap.sg_1, R.mipmap.sr_1
     };
     private MapObject Follow;
     private float GUN_OFFSET_Y = 0f;
@@ -65,7 +65,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     }
 
     public Gun(MapObject object, MainScene.Layer targetLayer, float offset_x, float offset_y, int type){
-        super(R.mipmap.assault_rifle);
+        super(resIds[type]);
         init(object, targetLayer, offset_x, offset_y, type);
     }
 
@@ -78,7 +78,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
     }
 
     Gun init(MapObject object, MainScene.Layer targetLayer, float x, float y, int type) {
-        setImageResourceId(resIds[type * 2]);
+        setImageResourceId(resIds[type]);
 
         if(paint == null) {
             paint = new Paint();
