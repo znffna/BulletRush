@@ -24,7 +24,7 @@ public class MainScene extends Scene {
     }
 
     public enum Layer {
-        none, bg, enemy, bullet, player, gun, ui, touch, controller;
+        none, bg, enemy, bullet, player, gun, ui, item, touch, controller;
         public static final int COUNT = values().length;
     }
 

@@ -72,6 +72,31 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         return life <= 0;
     }
 
+    public void applyPowerUp(PowerUp powerItem) {
+        float value = powerItem.getValue();
+        switch (powerItem.getType()){
+            case hp:
+                maxLife += value;
+                life += (maxLife - life) * 0.8f;
+                if(life > maxLife) life = maxLife;
+                break;
+            case attack:
+                attackPower += value;
+                for (Gun gun: guns) {
+                    gun.setPower(attackPower);
+                }
+                break;
+            case attackSpeed:
+                for (Gun gun: guns) {
+                    gun.setFIRE_INTERVAL(1f / ((1f / gun.getFIRE_INTERVAL()) + value));
+                }
+                break;
+            case moveSpeed:
+                speed += value;
+                break;
+        }
+    }
+
 
     public enum State {
         idle, move
@@ -80,7 +105,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     private final AnimSprite[] playerAnimSprite;
 
 
-    private final float SPEED;
+    private float speed;
     private final JoyStick joyStick;
 
     private final float FIRE_INTERVAL = 0.25f;
@@ -89,7 +114,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
 
     public Player(JoyStick joyStick) {
         super(0);
-        SPEED = 300f;
+        speed = 300f;
         AnimSprite player_idle = new AnimSprite(R.mipmap.player_idle, 4);
         AnimSprite player_move = new AnimSprite(R.mipmap.player_move, 4);
         playerAnimSprite = new AnimSprite[] {player_idle, player_move};
@@ -113,7 +138,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         }
         else {
             state = State.move;
-            float distance = SPEED * joyStick.power * GameView.frameTime;
+            float distance = speed * joyStick.power * GameView.frameTime;
             dx = (float) (distance * Math.cos(joyStick.angle_radian));
             dy = (float) (distance * Math.sin(joyStick.angle_radian));
             x += dx;
@@ -123,7 +148,6 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
             setPosition(x, y, PLAYER_WIDTH, PLAYER_HEIGHT);
         }
         setCamera(x,y);
-        super.update();
 
     }
 

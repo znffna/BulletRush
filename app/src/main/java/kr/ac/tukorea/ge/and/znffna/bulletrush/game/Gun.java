@@ -63,6 +63,10 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         this.FIRE_INTERVAL = FIRE_INTERVAL;
     }
 
+    public float getFIRE_INTERVAL() {
+        return FIRE_INTERVAL;
+    }
+
     private float FIRE_INTERVAL = 0.25f;
     private float fireCoolTime = FIRE_INTERVAL;
 
