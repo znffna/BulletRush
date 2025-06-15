@@ -1,4 +1,4 @@
-package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
+package kr.ac.tukorea.ge.and.znffna.bulletrush.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

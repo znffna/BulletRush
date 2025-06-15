@@ -8,6 +8,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
+import kr.ac.tukorea.ge.and.znffna.bulletrush.util.TextHelper;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.objects.AnimSprite;
@@ -50,7 +51,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
         if( this.exp < 0.0f) this.exp = 0f;
         this.maxExp *= 2;
 
-        
+
     }
 
     private void setLevel(int level) {
@@ -75,6 +76,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
     }
 
     public void applyPowerUp(PowerUp powerItem) {
+        Sound.playEffect(R.raw.pick);
         float value = powerItem.getValue();
         switch (powerItem.getType()){
             case hp:
@@ -90,7 +92,7 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
                 break;
             case attackSpeed:
                 for (Gun gun: guns) {
-                    gun.setFIRE_INTERVAL(1f / ((1f / gun.getFIRE_INTERVAL()) + value));
+                    gun.setFIRE_INTERVAL(gun.getFIRE_INTERVAL() * 0.9f);
                 }
                 break;
             case moveSpeed:
