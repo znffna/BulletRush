@@ -45,6 +45,22 @@ public class Player extends MapObject implements IBoxCollidable, ILayerProvider<
 
     private void addLevel() {
         setLevel(this.level + 1);
+        // 레벨업 보너스 : 줄어든 체력 비례 회복
+        life += (maxLife - life) * 0.2f;
+        Sound.playEffect(R.raw.level_up);
+        // status의 증가
+        switch (level % 3){
+            case 0:
+                attackPower += level * 2;
+                break;
+            case 1:
+                speed += level * 2;
+                break;
+            case 2:
+                maxLife *= 1.1f;
+                life *= 1.1f;
+                break;
+        }
 
         // exp 재설정
         this.exp -= this.maxExp;

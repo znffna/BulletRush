@@ -45,10 +45,21 @@ public class EnemyGenerator implements IGameObject {
         Player player = (Player) scene.objectsAt(MainScene.Layer.player).get(0);
         float px = player.getX();
         float py = player.getY();
+        int enemyType = 0;
         for(int i = 0; i < wave / 2 + 1; ++i){
             int level = random.nextInt(wave / 10 + 1);
             float x = random.nextFloat(), y = random.nextFloat();
-            Enemy.EnemyType type = Enemy.EnemyType.getType(random.nextInt(Enemy.EnemyType.COUNT));
+            float et = random.nextFloat();
+            if(et < 0.1f){
+                enemyType = 2;
+            }
+            else if (et < 0.3f){
+                enemyType = 1;
+            }
+            else{
+                enemyType = 0;
+            }
+            Enemy.EnemyType type = Enemy.EnemyType.getType(enemyType);
             scene.add(Enemy.get(px + Metrics.width/2 + x * (Metrics.worldWidth - Metrics.width), py + Metrics.height / 2 + y * (Metrics.worldHeight - Metrics.height), level, type));
 
             enemies.append(level); // for debug
