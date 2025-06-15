@@ -218,12 +218,12 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         switch (type){
             case AR:
             case SR:
-                Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(radianAngle), y + GUN_HEIGHT / 2 * (float)Math.sin(radianAngle), radianAngle, power, targetLayer, speed);
+                Bullet bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(radianAngle), y + GUN_HEIGHT / 2 * (float)Math.sin(radianAngle), radianAngle, power, targetLayer, speed, penetrableTimes);
                 scene.add(bullet);
                 break;
             case SG:
                 for(int i = 0; i < 3; ++i){
-                    bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(radianAngle), y + GUN_HEIGHT / 2 * (float)Math.sin(radianAngle), (float) Math.toRadians(angle), power, targetLayer, speed);
+                    bullet = Bullet.get(x + GUN_WIDTH / 2 * (float)Math.cos(radianAngle), y + GUN_HEIGHT / 2 * (float)Math.sin(radianAngle), (float) Math.toRadians(angle), power, targetLayer, speed, penetrableTimes);
                     scene.add(bullet);
                     angle += 10f;
                 }

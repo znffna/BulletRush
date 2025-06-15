@@ -30,11 +30,11 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
     private float maxRange = 3.0f;
     private MainScene.Layer targetLayer;
 
-    public static Bullet get(float x, float y, float angle, float power, MainScene.Layer target, float speed) {
-        return Scene.top().getRecyclable(Bullet.class).init(x, y, angle, power, target, speed);
+    public static Bullet get(float x, float y, float angle, float power, MainScene.Layer target, float speed, int penetrableTimes) {
+        return Scene.top().getRecyclable(Bullet.class).init(x, y, angle, power, target, speed, penetrableTimes);
     }
 
-    private Bullet init(float x, float y, float angle, float power, MainScene.Layer target, float speed) {
+    private Bullet init(float x, float y, float angle, float power, MainScene.Layer target, float speed, int penetrableTimes) {
         setPosition(x, y, BULLET_WIDTH, BULLET_HEIGHT);
         this.speed = speed;
         this.dx = (float) (this.speed * Math.cos(angle));
@@ -42,7 +42,7 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
         this.power = power;
         this.maxRange = 1000.0f;
         this.targetLayer = target;
-        this.penetrableTimes = 0;
+        this.penetrableTimes = penetrableTimes;
         hitObject.clear();
         return this;
     }

@@ -119,9 +119,9 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
 
     private Enemy init(float x, float y, int level, EnemyType type) {
         setPosition(x, y, ENEMY_WIDTH, ENEMY_HEIGHT);
+        setType(type);
         setState(State.idle, 2.0f);
         this.level = level;
-        setType(type);
 
         if (paint == null) {
             paint = new Paint();
