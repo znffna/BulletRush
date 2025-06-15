@@ -136,12 +136,15 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
 
         switch (this.type) {
             case AR:
+                this.FIRE_INTERVAL = 0.25f;
                 this.penetrableTimes = 0;
                 break;
             case SG:
+                this.FIRE_INTERVAL = 1.0f;
                 this.penetrableTimes = 0;
                 break;
             case SR:
+                this.FIRE_INTERVAL = 1.0f;
                 this.penetrableTimes = 2;
                 break;
         }
