@@ -6,13 +6,14 @@ import android.util.Log;
 import java.util.Random;
 
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IGameObject;
+import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.Metrics;
 
 public class EnemyGenerator implements IGameObject {
     private static final String TAG = EnemyGenerator.class.getSimpleName();
     private final Random random = new Random();
-    public static final float GEN_INTERVAL = 5.0f;
+    public static final float GEN_INTERVAL = 10.0f;
     private final MainScene scene;
     private float enemyTime = 0;
     private int wave;
@@ -28,6 +29,12 @@ public class EnemyGenerator implements IGameObject {
             generate();
             enemyTime = GEN_INTERVAL;
         }
+        
+        // 적이 없는 경우에 바로 생성
+        if(Scene.top().objectsAt(MainScene.Layer.enemy).isEmpty()){
+            generate();
+            enemyTime = GEN_INTERVAL;
+        }
     }
 
     private void generate() {
@@ -39,7 +46,7 @@ public class EnemyGenerator implements IGameObject {
         float px = player.getX();
         float py = player.getY();
         int level = 0;
-        for(int i = 0; i < wave / 5 + 1; ++i){
+        for(int i = 0; i < wave / 2 + 1; ++i){
             float x = random.nextFloat(), y = random.nextFloat();
             Enemy.EnemyType type = Enemy.EnemyType.getType(random.nextInt(Enemy.EnemyType.COUNT));
             scene.add(Enemy.get(px + Metrics.width/2 + x * (Metrics.worldWidth - Metrics.width), py + Metrics.height / 2 + y * (Metrics.worldHeight - Metrics.height), level, type));
