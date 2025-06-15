@@ -157,7 +157,7 @@ public class Enemy extends MapObject implements IRecyclable, IBoxCollidable, ILa
             this.exp = (float) Math.pow(2.0f, level) * 100;
             this.gun = Gun.get(this, MainScene.Layer.player, 50, 5, 0);
             this.gun.setFIRE_INTERVAL(2.0f);
-            this.gun.setSpeed(100.0f);
+            this.gun.setSpeed(200.0f);
             Scene.top().add(this.gun);
             this.gun.setRange(this.range = ENEMY_WIDTH * 6.0f);
             this.speed = DEFAULT_SPEED;

@@ -155,7 +155,7 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
         Scene scene = Scene.top();
         if(scene == null) return;
 
-        maxLength = range * range;
+        maxLength = range;
         MapObject bfNear = nearestTarget;
         nearestTarget = null;
         ArrayList<IGameObject> targets = Scene.top().objectsAt(targetLayer);
@@ -163,15 +163,14 @@ public class Gun extends Sprite implements IRecyclable, ILayerProvider<MainScene
             if (target instanceof MapObject) {
                 float tx = ((Sprite) target).getX();
                 float ty = ((Sprite) target).getY();
-                float length = (tx - x) * (tx - x) + (ty - y) * (ty - y);
+                PointF len = WarpUtil.getWrappedDelta(x, y, tx, ty);
+                float length = len.length();
                 if (length < maxLength){
                     nearestTarget = ((MapObject)target);
                     maxLength = length;
                 }
             }
         }
-
-        maxLength = (float) Math.sqrt(maxLength);
 
         if(nearestTarget != null){
             float tx = nearestTarget.getX();
