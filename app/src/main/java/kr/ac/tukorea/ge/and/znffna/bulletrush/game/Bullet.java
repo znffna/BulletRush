@@ -2,6 +2,8 @@ package kr.ac.tukorea.ge.and.znffna.bulletrush.game;
 
 import android.graphics.RectF;
 
+import java.util.HashSet;
+
 import kr.ac.tukorea.ge.and.znffna.bulletrush.R;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.IBoxCollidable;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.interfaces.ILayerProvider;
@@ -10,6 +12,9 @@ import kr.ac.tukorea.ge.spgp2025.a2dg.framework.scene.Scene;
 import kr.ac.tukorea.ge.spgp2025.a2dg.framework.view.GameView;
 
 public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, ILayerProvider<MainScene.Layer> {
+    private int penetrableTimes; // 관통 가능 횟수
+    private HashSet<MapObject> hitObject;
+
     public void setSpeed(float speed) {
         this.speed = speed;
     }
@@ -37,6 +42,7 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
         this.power = power;
         this.maxRange = 1000.0f;
         this.targetLayer = target;
+        this.penetrableTimes = 0;
         return this;
     }
 
@@ -78,8 +84,16 @@ public class Bullet extends MapObject implements IRecyclable, IBoxCollidable, IL
         return targetLayer;
     }
 
-    public void onHit() {
+    public void onHit(MapObject object) {
+        // 이미 부딫힌 오브젝트인지 확인
+        if(hitObject.contains(object)) return;
+        
+        // 새로 부딫힌 오브젝트에 대한 충돌로직 처리
+        hitObject.add(object);
         Scene.top().add(new HitPopup("" + (int)this.power, px, py, 40, 0f, -50f, 0.3f));
-        Scene.top().remove(this);
+        penetrableTimes -= 1;
+        if(penetrableTimes < 0){
+            Scene.top().remove(this);
+        }
     }
 }
